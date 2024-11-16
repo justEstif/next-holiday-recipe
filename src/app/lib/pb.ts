@@ -1,24 +1,25 @@
+import { NextRequest } from "next/server";
 import PocketBase from "pocketbase";
 
-// you can place this helper in a separate file so that it can be reused
-async function initPocketBase(req, res) {
+// TODO think about how we plan on init pb
+// Sometimes I only want the user
+export async function initPocketBase(req: NextRequest) {
   const pb = new PocketBase("http://127.0.0.1:8090");
 
   // load the store data from the request cookie string
-  pb.authStore.loadFromCookie(req?.headers?.cookie || "");
-
-  // send back the default 'pb_auth' cookie to the client with the latest store state
-  pb.authStore.onChange(() => {
-    res?.setHeader("set-cookie", pb.authStore.exportToCookie());
-  });
+  const authCookie = req.cookies.get("pb_auth")?.value || "";
+  pb.authStore.loadFromCookie(authCookie);
 
   try {
-    // get an up-to-date auth store state by verifying and refreshing the loaded auth model (if any)
-    pb.authStore.isValid && (await pb.collection("users").authRefresh());
+    if (pb.authStore.isValid) {
+      await pb.collection("users").authRefresh();
+    }
   } catch (_) {
     // clear the auth store on failed refresh
     pb.authStore.clear();
   }
 
-  return pb;
+  const authCookieString = pb.authStore.exportToCookie();
+
+  return { pb, authCookieString };
 }
