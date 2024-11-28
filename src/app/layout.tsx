@@ -1,4 +1,5 @@
 import NavBar from "@/components/NavBar";
+import { signIn } from "@/lib/pb";
 import "@picocss/pico";
 import type { Metadata } from "next";
 

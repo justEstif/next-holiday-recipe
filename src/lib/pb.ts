@@ -5,7 +5,6 @@ export const PB_URL = process.env.POCKETBASE_URL || "http://127.0.0.1:8090";
 export const PB_COOKIE_NAME = "pb_auth";
 
 export async function pbServer(request: NextRequest) {
-  "use server"
   const pb = new PocketBase(PB_URL);
 
   // Load the store data from the request cookie string
@@ -27,6 +26,10 @@ export async function pbServer(request: NextRequest) {
 }
 
 export const signIn = async () => {
+  if (typeof window === "undefined") {
+    throw new Error("This is client side code");
+  }
+
   try {
     const pb = new PocketBase(PB_URL);
     const authData = await pb
