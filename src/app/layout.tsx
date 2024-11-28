@@ -1,3 +1,4 @@
+import NavBar from "@/components/NavBar";
 import "@picocss/pico";
 import type { Metadata } from "next";
 
@@ -13,7 +14,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        <header className="container">
+          <NavBar />
+        </header>
+        <main>{children}</main>
+      </body>
     </html>
   );
 }
