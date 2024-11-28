@@ -1,10 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
-import { PB_COOKIE_NAME } from "@/lib/pb";
+import { pbServer } from "@/lib/pb";
 
 export const withUser = async (request: NextRequest) => {
-  const authCookie = request.cookies.get(PB_COOKIE_NAME);
-  if (!authCookie) {
+  const pb = await pbServer(request);
+  if (!pb.authStore.model) {
     return NextResponse.redirect("/");
   }
+  console.log(pb.authStore.model)
   return NextResponse.next();
 };

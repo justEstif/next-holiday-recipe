@@ -2,17 +2,17 @@ import { withUpdatedSession } from "@/middlewares/withUpdatedSession";
 import { withUser } from "@/middlewares/withUser";
 import { NextRequest, NextResponse } from "next/server";
 
-const protectedRoutes = [
+const PROTECTED_ROUTES = [
+  "/recipes",
   "/recipes/new",
   "/recipes/submit",
   "/recipes/:id/edit",
-  "/users/:username/edit",
+  "/users/:id/edit",
   "/logout",
-  "/admin",
 ];
 
 const isProtectedRoute = (pathname: string) => {
-  return protectedRoutes.some((route) => {
+  return PROTECTED_ROUTES.some((route) => {
     // Convert route patterns with dynamic parameters into regular expressions
     const routePattern = "^" + route.replace(/:\w+/g, "[^/]+") + "$";
     const regex = new RegExp(routePattern);
@@ -21,6 +21,8 @@ const isProtectedRoute = (pathname: string) => {
 };
 
 export const middleware = async (request: NextRequest) => {
+
+  console.log(`[${new Date().toISOString()}] ${request.method} ${request.url}`);
   await withUpdatedSession(request);
 
   const { pathname } = request.nextUrl;

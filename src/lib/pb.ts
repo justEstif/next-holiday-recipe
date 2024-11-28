@@ -19,11 +19,20 @@ export async function pbServer(request: NextRequest) {
     }
   } catch (error) {
     console.error("Auth refresh failed:", error);
+    request.cookies.delete(PB_COOKIE_NAME);
     pb.authStore.clear();
   }
 
   return pb;
 }
+
+export const signOut = async () => {
+  const pb = new PocketBase(PB_URL);
+  if (typeof window !== "undefined") {
+    document.cookie = pb.authStore.exportToCookie({ httpOnly: false });
+  }
+  pb.authStore.clear();
+};
 
 export const signIn = async () => {
   if (typeof window === "undefined") {
@@ -43,6 +52,9 @@ export const signIn = async () => {
 };
 
 export const getUser = () => {
+  if (typeof window === "undefined") {
+    throw new Error("This is client side code");
+  }
   const pb = new PocketBase(PB_URL);
   pb.authStore.loadFromCookie(document?.cookie ?? "");
   return pb.authStore.model;
