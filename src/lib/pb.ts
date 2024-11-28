@@ -5,6 +5,7 @@ export const PB_URL = process.env.POCKETBASE_URL || "http://127.0.0.1:8090";
 export const PB_COOKIE_NAME = "pb_auth";
 
 export async function pbServer(request: NextRequest) {
+  "use server"
   const pb = new PocketBase(PB_URL);
 
   // Load the store data from the request cookie string
@@ -31,15 +32,15 @@ export const signIn = async () => {
     const authData = await pb
       .collection("users")
       .authWithOAuth2({ provider: "github" });
-
     document.cookie = pb.authStore.exportToCookie({ httpOnly: false });
-    console.log(document.cookie);
-    console.log("auth success = ", authData);
     return authData;
-    // TODO
-    // cookies().set("pocketbase_auth", pb.authStore.exportToCookie());
-    // document.cookie = pb.authStore.exportToCookie({ httpOnly: false });
   } catch (error) {
     throw error;
   }
+};
+
+export const getUser = () => {
+  const pb = new PocketBase(PB_URL);
+  pb.authStore.loadFromCookie(document?.cookie ?? "");
+  return pb.authStore.model;
 };
