@@ -6,12 +6,13 @@ export async function withUpdatedSession(request: NextRequest) {
 
   const authCookieString = pb.authStore.exportToCookie();
 
-  let withPbResponse = NextResponse.next();
-  withPbResponse.cookies.set("pb_auth", authCookieString, {
+  let res = NextResponse.next();
+  res.cookies.set("pb_auth", authCookieString, {
     path: "/",
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     sameSite: "lax",
   });
-  return withPbResponse;
+
+  return res;
 }
