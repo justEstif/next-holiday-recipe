@@ -6,6 +6,5 @@ export const withUser = async (request: NextRequest) => {
   if (!pb.authStore.model) {
     return NextResponse.redirect("/");
   }
-  console.log(pb.authStore.model)
   return NextResponse.next();
 };
