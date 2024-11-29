@@ -1,9 +1,9 @@
 const Page = () => {
   return (
-    <section>
+    <section className="container">
       <h1>Featured Recipes</h1>
     </section>
   );
 };
 
-export default Page
+export default Page;
