@@ -1,33 +1,42 @@
 "use client";
-
-import { getUser, signIn, signOut } from "@/lib/pb";
+import usePocketbase from "@/hooks/usePocketbase";
 
 const NavBar = () => {
-  const user = getUser();
-  console.log(user);
+  const { user, signIn, signOut } = usePocketbase();
+
+  const handleSignIn = async () => {
+    try {
+      await signIn();
+    } catch (error) {
+      // Handle sign-in error
+    }
+  };
+
+  const handleSignOut = () => {
+    signOut();
+  };
+
   return (
     <nav>
       <ul>
         <li>
-          <strong>Recipe</strong>
+          <strong>Recipe App</strong>
         </li>
       </ul>
-      <ul>
-        {user ? (
+      <ul></ul>
+      {user ? (
+        <>
           <li>
-            <button onClick={signOut}>Sign Out</button>
+            <button onClick={handleSignOut}>{user.username} - Sign Out</button>
           </li>
-        ) : (
-          <li>
-            <button onClick={signIn}>Sign In with GitHub</button>
-          </li>
-        )}
-      </ul>
+        </>
+      ) : (
+        <li>
+          <button onClick={handleSignIn}>Sign In</button>
+        </li>
+      )}
     </nav>
   );
 };
 
 export default NavBar;
-
-// show sign out and profile links if registered user
-// show sign in button if visitor user
