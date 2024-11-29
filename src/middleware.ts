@@ -1,6 +1,7 @@
 import { withUpdatedSession } from "@/middlewares/withUpdatedSession";
 import { withUser } from "@/middlewares/withUser";
 import { NextRequest, NextResponse } from "next/server";
+import { withLogging } from "./middlewares/withLogging";
 
 const PROTECTED_ROUTES = [
   "/recipes",
@@ -21,13 +22,12 @@ const isProtectedRoute = (pathname: string) => {
 };
 
 export const middleware = async (request: NextRequest) => {
-
-  console.log(`[${new Date().toISOString()}] ${request.method} ${request.url}`);
-  await withUpdatedSession(request);
-
   const { pathname } = request.nextUrl;
+
+  withLogging(request);
+  await withUpdatedSession(request);
   if (isProtectedRoute(pathname)) {
-    await withUser(request);
+    return await withUser(request);
   }
 
   return NextResponse.next();
