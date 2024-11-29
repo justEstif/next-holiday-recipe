@@ -25,37 +25,3 @@ export async function pbServer(request: NextRequest) {
 
   return pb;
 }
-
-export const signOut = async () => {
-  const pb = new PocketBase(PB_URL);
-  if (typeof window !== "undefined") {
-    document.cookie = pb.authStore.exportToCookie({ httpOnly: false });
-  }
-  pb.authStore.clear();
-};
-
-export const signIn = async () => {
-  if (typeof window === "undefined") {
-    throw new Error("This is client side code");
-  }
-
-  try {
-    const pb = new PocketBase(PB_URL);
-    const authData = await pb
-      .collection("users")
-      .authWithOAuth2({ provider: "github" });
-    document.cookie = pb.authStore.exportToCookie({ httpOnly: false });
-    return authData;
-  } catch (error) {
-    throw error;
-  }
-};
-
-export const getUser = () => {
-  if (typeof window === "undefined") {
-    throw new Error("This is client side code");
-  }
-  const pb = new PocketBase(PB_URL);
-  pb.authStore.loadFromCookie(document?.cookie ?? "");
-  return pb.authStore.model;
-};
