@@ -1,5 +1,6 @@
 "use client";
 import usePocketbase from "@/hooks/usePocketbase";
+import Link from "next/link";
 
 const NavBar = () => {
   const { user, signIn, signOut } = usePocketbase();
@@ -20,7 +21,9 @@ const NavBar = () => {
     <nav>
       <ul>
         <li>
-          <strong>Recipe App</strong>
+          <strong>
+            <Link href="/">Recipe App</Link>
+          </strong>
         </li>
       </ul>
       <ul></ul>

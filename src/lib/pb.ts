@@ -40,3 +40,17 @@ export interface User {
   username: string;
   verified: boolean;
 }
+
+export type Recipe = {
+  id: string;
+  collectionId: string;
+  collectionName: string;
+  created: string; // ISO date string
+  updated: string; // ISO date string
+  authorId: string;
+  title: string;
+  ingredients: string; // JSON string or object, depending on your handling
+  steps: string; // JSON string or object, depending on your handling
+  image: string; // Filename or file path
+  tags: string; // JSON string or object, depending on your handling
+};
