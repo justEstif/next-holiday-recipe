@@ -3,10 +3,11 @@ export default async function Page({
 }: {
   params: Promise<{ recipeId: string }>;
 }) {
-  const slug = (await params).recipeId;
+  const { recipeId } = await params;
+
   return (
     <section className="container">
-      <h1>Recipe - {slug}</h1>
+      <h1>Recipe - {recipeId}</h1>
     </section>
   );
 }

@@ -2,7 +2,7 @@ import { pbServer } from "@/lib/pb";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function withUpdatedSession(request: NextRequest) {
-  const pb = await pbServer(request);
+  const pb = await pbServer(request.cookies);
 
   const authCookieString = pb.authStore.exportToCookie();
 
