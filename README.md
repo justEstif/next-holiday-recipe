@@ -6,8 +6,8 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 - **Home Page** (`/`)
 - **Recipe Listing Page** (`/recipes`)
-- **Recipe Details Page** (`/recipes/[id]`)
-- **User Profile Page** (`/users/[username]`)
+- **Recipe Details Page** (`/recipes/[recipeId]`)
+- **User Profile Page** (`/users/[userId]`)
 - **Search Results Page** (`/search`)
 - **Viewing Comments and Ratings** (on Recipe Details Page)
 - **Authentication Pages** (`/login`, `/auth/callback`)
@@ -18,8 +18,8 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 # **Protected Pages (Authentication Required)**
 
 - **Submit New Recipe Page** (`/recipes/new`)
-- **Edit Recipe Page** (`/recipes/[id]/edit`)
-- **Edit Profile Page** (`/users/[id]/edit`)
+- **Edit Recipe Page** (`/recipes/[recipeId]/edit`)
+- **Edit Profile Page** (`/users/[userId]/edit`)
 - **Posting Comments and Ratings** (on Recipe Details Page)
     - the component should be hidden
 - **Logout Page** (`/sign-out`)

@@ -3,10 +3,9 @@ import { pbServer } from "@/lib/pb";
 
 const PROTECTED_ROUTES = [
   "/recipes/new",
-  "/recipes/submit",
   "/recipes/:id/edit",
   "/users/:id/edit",
-  "/logout",
+  "/sign-out",
 ];
 
 const isProtectedRoute = (pathname: string) => {

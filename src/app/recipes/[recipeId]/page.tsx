@@ -1,9 +1,9 @@
 export default async function Page({
   params,
 }: {
-  params: Promise<{ slug: string }>;
+  params: Promise<{ recipeId: string }>;
 }) {
-  const slug = (await params).slug;
+  const slug = (await params).recipeId;
   return (
     <section className="container">
       <h1>Recipe - {slug}</h1>

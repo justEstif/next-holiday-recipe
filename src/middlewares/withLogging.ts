@@ -15,6 +15,4 @@ export const withLogging = (request: NextRequest) => {
       `[${new Date().toISOString()}] ${request.method} ${request.url}`,
     );
   }
-
-  return NextResponse.next();
 };
