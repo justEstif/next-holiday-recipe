@@ -1,7 +1,7 @@
-export default function Home() {
+export default function Page() {
   return (
     <section className="container">
-      <h1>Home Page</h1>
+      <h1>Recipe</h1>
     </section>
   );
 }
