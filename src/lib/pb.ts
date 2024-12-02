@@ -1,6 +1,7 @@
 import PocketBase from "pocketbase";
 import { NextRequest } from "next/server";
 import { ReadonlyRequestCookies } from "next/dist/server/web/spec-extension/adapters/request-cookies";
+import Client from "pocketbase";
 
 export const PB_URL = process.env.POCKETBASE_URL || "http://127.0.0.1:8090";
 export const PB_COOKIE_NAME = "pb_auth";
@@ -26,6 +27,10 @@ export async function pbServer(
   }
 
   return pb;
+}
+
+export function getRecipeImageUrl(pb: Client, recipe: Recipe): string {
+  return pb.getFileUrl(recipe, recipe.image);
 }
 
 export interface User {
