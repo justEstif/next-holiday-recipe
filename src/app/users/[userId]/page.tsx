@@ -37,8 +37,7 @@ export default async function Page({
   const { userId } = await params;
   const user = await getUser(userId);
   const currentUser = await getCurrentUser();
-
-  const canEdit = currentUser?.id === userId;
+  const canEdit = user && currentUser && currentUser.id === user.id;
 
   return (
     <section className="container">

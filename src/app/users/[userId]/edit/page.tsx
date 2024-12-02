@@ -23,6 +23,7 @@ async function updateUser(userId: string, data: Partial<User>) {
     const updatedUserData = await pb
       .collection("users")
       .update<User>(userId, data);
+    return updatedUserData;
   } catch (error) {
     console.error("Error updating user", error);
     return null;
