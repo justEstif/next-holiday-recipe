@@ -1,8 +1,9 @@
-import { pbServer, Recipe } from "@/lib/pb";
+import { pbServer } from "@/lib/pb";
 import Image from "next/image";
 import { sliceArrayIntoBatches } from "@/utils";
 import { cookies } from "next/headers";
 import Client from "pocketbase";
+import { type Recipe } from "@/types";
 
 async function getRecipes(pb: Client) {
   try {
@@ -12,10 +13,6 @@ async function getRecipes(pb: Client) {
     console.error("Error getting recipes", error);
     return null;
   }
-}
-
-function getRecipeImageUrl(pb: Client, recipe: Recipe): string {
-  return pb.getFileUrl(recipe, recipe.image);
 }
 
 export default async function Home() {
@@ -36,7 +33,7 @@ export default async function Home() {
                 <a href={`recipes/${recipe.id}`}>{recipe.title}</a>
               </h3>
               <Image
-                src={getRecipeImageUrl(pb, recipe)}
+                src={pb.getFileUrl(recipe, recipe.image)}
                 alt={`${recipe.title} image`}
                 width={300}
                 height={300}

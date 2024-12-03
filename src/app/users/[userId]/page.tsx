@@ -1,6 +1,7 @@
-import { pbServer, User } from "@/lib/pb";
+import { pbServer } from "@/lib/pb";
 import { cookies } from "next/headers";
 import Link from "next/link";
+import { type User } from "@/types";
 
 async function getUser(userId: string) {
   try {

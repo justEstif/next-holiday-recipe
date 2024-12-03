@@ -1,7 +1,7 @@
+import "server-only";
 import PocketBase from "pocketbase";
 import { NextRequest } from "next/server";
 import { ReadonlyRequestCookies } from "next/dist/server/web/spec-extension/adapters/request-cookies";
-import Client from "pocketbase";
 
 export const PB_URL = process.env.POCKETBASE_URL || "http://127.0.0.1:8090";
 export const PB_COOKIE_NAME = "pb_auth";
@@ -28,34 +28,3 @@ export async function pbServer(
 
   return pb;
 }
-
-export function getRecipeImageUrl(pb: Client, recipe: Recipe): string {
-  return pb.getFileUrl(recipe, recipe.image);
-}
-
-export interface User {
-  avatar: string;
-  collectionId: string;
-  collectionName: string;
-  created: Date; // Using Date type
-  emailVisibility: boolean;
-  id: string;
-  name: string;
-  updated: Date; // Using Date type
-  username: string;
-  verified: boolean;
-}
-
-export type Recipe = {
-  id: string;
-  collectionId: string;
-  collectionName: string;
-  created: string; // ISO date string
-  updated: string; // ISO date string
-  authorId: string;
-  title: string;
-  ingredients: string; // JSON string or object, depending on your handling
-  steps: string; // JSON string or object, depending on your handling
-  image: string; // Filename or file path
-  tags: string; // JSON string or object, depending on your handling
-};

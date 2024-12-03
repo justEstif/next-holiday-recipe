@@ -1,4 +1,5 @@
-import { pbServer, User } from "@/lib/pb";
+import { pbServer } from "@/lib/pb";
+import { type User } from "@/types";
 import { cookies } from "next/headers";
 
 async function getUser(userId: string) {
@@ -16,6 +17,7 @@ async function getUser(userId: string) {
   }
 }
 
+// TODO create update user option
 async function updateUser(userId: string, data: Partial<User>) {
   try {
     const cookieStore = await cookies();

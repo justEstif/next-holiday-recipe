@@ -1,4 +1,5 @@
-import { pbServer, Recipe } from "@/lib/pb";
+import { pbServer } from "@/lib/pb";
+import { type Recipe } from "@/types";
 import { cookies } from "next/headers";
 
 async function getRecipe(recipeId: string) {
