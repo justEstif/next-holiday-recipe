@@ -1,22 +1,7 @@
-"use client";
-import usePocketbase from "@/hooks/usePocketbase";
 import Link from "next/link";
+import AuthButtons from "./AuthButtons";
 
 const NavBar = () => {
-  const { user, signIn, signOut } = usePocketbase();
-
-  const handleSignIn = async () => {
-    try {
-      await signIn();
-    } catch (error) {
-      // Handle sign-in error
-    }
-  };
-
-  const handleSignOut = () => {
-    signOut();
-  };
-
   return (
     <nav>
       <ul>
@@ -26,18 +11,7 @@ const NavBar = () => {
           </strong>
         </li>
       </ul>
-      <ul></ul>
-      {user ? (
-        <>
-          <li>
-            <button onClick={handleSignOut}>{user.username} - Sign Out</button>
-          </li>
-        </>
-      ) : (
-        <li>
-          <button onClick={handleSignIn}>Sign In</button>
-        </li>
-      )}
+      <AuthButtons />
     </nav>
   );
 };
