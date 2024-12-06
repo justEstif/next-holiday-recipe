@@ -1,34 +1,5 @@
-import { pbServer } from "@/lib/pb";
-import { cookies } from "next/headers";
+import { getLoggedInUser, getUser } from "@/lib/server/pb";
 import Link from "next/link";
-import { type User } from "@/types";
-
-async function getUser(userId: string) {
-  try {
-    const cookieStore = await cookies();
-    const pb = await pbServer(cookieStore);
-
-    const userData = await pb.collection("users").getOne<User>(userId, {
-      expand: "relField1,relField2.subRelField",
-    });
-    return userData;
-  } catch (error) {
-    console.error("Error fetching user data", error);
-    return null;
-  }
-}
-
-async function getCurrentUser() {
-  try {
-    const cookieStore = await cookies();
-    const pb = await pbServer(cookieStore);
-    const currentUser = pb.authStore.model;
-    return currentUser;
-  } catch (error) {
-    console.error("Error fetching current user", error);
-    return null;
-  }
-}
 
 export default async function Page({
   params,
@@ -37,8 +8,8 @@ export default async function Page({
 }) {
   const { userId } = await params;
   const user = await getUser(userId);
-  const currentUser = await getCurrentUser();
-  const canEdit = user && currentUser && currentUser.id === user.id;
+  const loggedInUser = await getLoggedInUser();
+  const canEdit = user && loggedInUser && loggedInUser.id === user.id;
 
   return (
     <section className="container">
