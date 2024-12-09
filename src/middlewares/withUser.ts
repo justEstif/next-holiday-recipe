@@ -1,5 +1,5 @@
+import { pbServer } from "@/lib/server/pb";
 import { NextRequest, NextResponse } from "next/server";
-import { pbServer } from "@/lib/pb";
 
 const PROTECTED_ROUTES = [
   "/recipes/new",
@@ -20,7 +20,7 @@ const isProtectedRoute = (pathname: string) => {
 export const withUser = async (request: NextRequest) => {
   const { pathname } = request.nextUrl;
   if (isProtectedRoute(pathname)) {
-    const pb = await pbServer(request.cookies);
+    const pb = await pbServer();
     if (!pb.authStore.model) {
       return NextResponse.redirect(new URL("/", request.url));
     }

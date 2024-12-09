@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest } from "next/server";
 
 export const withLogging = (request: NextRequest) => {
   const { pathname } = request.nextUrl;

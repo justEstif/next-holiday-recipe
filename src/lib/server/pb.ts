@@ -1,4 +1,3 @@
-"use server";
 import PocketBase from "pocketbase";
 import { cookies } from "next/headers";
 import { User } from "@/types";

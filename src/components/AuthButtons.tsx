@@ -1,38 +1,25 @@
-"use client";
-import usePocketbase from "@/hooks/usePocketbase";
+import { getLoggedInUser } from "@/lib/server/pb";
+import SignOut from "./SignOut";
+import SignIn from "./SignIn";
 
-const AuthButtons = () => {
-  const { user, signIn, signOut } = usePocketbase();
-
-  const handleSignIn = async () => {
-    try {
-      await signIn();
-    } catch (error) {
-      // Handle sign-in error
-    }
-  };
-
-  const handleSignOut = () => {
-    signOut();
-  };
+export default async function AuthButtons() {
+  const currentUser = await getLoggedInUser();
 
   return (
     <>
-      {user ? (
+      {currentUser ? (
         <ul>
           <li>
-            <button onClick={handleSignOut}>{user.username} - Sign Out</button>
+            <SignOut />
           </li>
         </ul>
       ) : (
         <ul>
           <li>
-            <button onClick={handleSignIn}>Sign In</button>
+            <SignIn />
           </li>
         </ul>
       )}
     </>
   );
-};
-
-export default AuthButtons;
+}
