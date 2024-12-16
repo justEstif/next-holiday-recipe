@@ -59,3 +59,34 @@ export async function getUser(userId: string) {
     return null;
   }
 }
+export async function getAuthCookie(
+  cookieStore:
+    | NextRequest["cookies"]
+    | NextResponse["cookies"]
+    | ReadonlyRequestCookies,
+) {
+  const authCookie = cookieStore.get(PB_COOKIE_NAME);
+  return authCookie?.value || null;
+}
+
+export async function setAuthCookie(
+  pb: PocketBase,
+  cookieStore:
+    | NextRequest["cookies"]
+    | NextResponse["cookies"]
+    | ReadonlyRequestCookies,
+) {
+  try {
+    const authCookie = pb.authStore.exportToCookie({
+      path: "/",
+      httpOnly: false,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+    });
+    const [_cookieName, cookieValue] = authCookie.split("=");
+    cookieStore.set("pb_auth", cookieValue);
+  } catch (error) {
+    console.log("Error signing in user", error);
+    return null;
+  }
+}
