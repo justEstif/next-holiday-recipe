@@ -1,18 +1,9 @@
-import { pbServer } from "@/lib/server/pb";
-import { NextResponse } from "next/server";
+import { pbServer, setAuthCookie } from "@/lib/server/pb";
+import { NextRequest, NextResponse } from "next/server";
 
-export async function withUpdatedSession() {
-  const pb = await pbServer();
-
-  const authCookieString = pb.authStore.exportToCookie();
-
+export async function withUpdatedSession(request: NextRequest) {
+  const pb = await pbServer(request.cookies);
   let res = NextResponse.next();
-  res.cookies.set("pb_auth", authCookieString, {
-    path: "/",
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "lax",
-  });
-
+  setAuthCookie(pb, res.cookies);
   return res;
 }

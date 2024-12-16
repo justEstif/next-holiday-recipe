@@ -1,25 +1,30 @@
-import { getLoggedInUser } from "@/lib/server/pb";
+import { getLoggedInUser, pbServer } from "@/lib/server/pb";
 import SignOut from "./SignOut";
-import SignIn from "./SignIn";
+import Link from "next/link";
+import { cookies } from "next/headers";
 
 export default async function AuthButtons() {
-  const currentUser = await getLoggedInUser();
+  const cookieStore = await cookies();
+  const pb = await pbServer(cookieStore);
+  const currentUser = await getLoggedInUser(pb);
 
   return (
     <>
-      {currentUser ? (
-        <ul>
-          <li>
-            <SignOut />
-          </li>
-        </ul>
-      ) : (
-        <ul>
-          <li>
-            <SignIn />
-          </li>
-        </ul>
-      )}
+      {currentUser
+        ? (
+          <ul>
+            <li>
+              <SignOut />
+            </li>
+          </ul>
+        )
+        : (
+          <ul>
+            <li>
+              <Link href="/sign-in">Sign in</Link>
+            </li>
+          </ul>
+        )}
     </>
   );
 }

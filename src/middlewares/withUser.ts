@@ -20,7 +20,7 @@ const isProtectedRoute = (pathname: string) => {
 export const withUser = async (request: NextRequest) => {
   const { pathname } = request.nextUrl;
   if (isProtectedRoute(pathname)) {
-    const pb = await pbServer();
+    const pb = await pbServer(request.cookies);
     if (!pb.authStore.model) {
       return NextResponse.redirect(new URL("/", request.url));
     }

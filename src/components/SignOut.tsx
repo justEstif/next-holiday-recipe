@@ -5,7 +5,8 @@ async function signOut() {
   "use server";
 
   try {
-    const pb = await pbServer();
+    const cookieStore = await cookies();
+    const pb = await pbServer(cookieStore);
     (await cookies()).delete("pb_auth");
     pb.authStore.clear();
   } catch (error) {

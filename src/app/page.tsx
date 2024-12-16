@@ -1,6 +1,7 @@
 import Image from "next/image";
-import { sliceArrayIntoBatches } from "@/utils";
+import { cookies } from "next/headers";
 import Client from "pocketbase";
+import { sliceArrayIntoBatches } from "@/utils";
 import { type Recipe } from "@/types";
 import { pbServer } from "@/lib/server/pb";
 
@@ -15,7 +16,8 @@ async function getRecipes(pb: Client) {
 }
 
 export default async function Home() {
-  const pb = await pbServer();
+  const cookieStore = await cookies();
+  const pb = await pbServer(cookieStore);
 
   const recipes = await getRecipes(pb);
   const batchedRecipes = sliceArrayIntoBatches(recipes?.items || [], 3);

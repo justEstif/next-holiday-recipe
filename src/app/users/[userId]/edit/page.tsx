@@ -1,4 +1,4 @@
-import { pbServer } from "@/lib/pb";
+import { pbServer } from "@/lib/server/pb";
 import { type User } from "@/types";
 import { cookies } from "next/headers";
 
@@ -32,9 +32,7 @@ async function updateUser(userId: string, data: Partial<User>) {
   }
 }
 
-export default async function Page({
-  params,
-}: {
+export default async function Page({ params }: {
   params: Promise<{ userId: string }>;
 }) {
   const { userId } = await params;

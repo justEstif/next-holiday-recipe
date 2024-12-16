@@ -1,4 +1,5 @@
-import { getLoggedInUser, getUser } from "@/lib/server/pb";
+import { getLoggedInUser, getUser, pbServer } from "@/lib/server/pb";
+import { cookies } from "next/headers";
 import Link from "next/link";
 
 export default async function Page({
@@ -7,8 +8,10 @@ export default async function Page({
   params: Promise<{ userId: string }>;
 }) {
   const { userId } = await params;
-  const user = await getUser(userId);
-  const loggedInUser = await getLoggedInUser();
+  const cookieStore = await cookies();
+  const pb = await pbServer(cookieStore);
+  const user = await getUser(pb, userId);
+  const loggedInUser = await getLoggedInUser(pb);
   const canEdit = user && loggedInUser && loggedInUser.id === user.id;
 
   return (
