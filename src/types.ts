@@ -1,3 +1,6 @@
+import { NextRequest, NextResponse } from "next/server";
+import { ReadonlyRequestCookies } from "next/dist/server/web/spec-extension/adapters/request-cookies";
+
 export interface User {
   avatar: string;
   collectionId: string;
@@ -24,3 +27,8 @@ export type Recipe = {
   image: string; // Filename or file path
   tags: string; // JSON string or object, depending on your handling
 };
+
+export type CookieStore =
+  | NextRequest["cookies"]
+  | NextResponse["cookies"]
+  | ReadonlyRequestCookies;
