@@ -59,6 +59,23 @@ export async function getUser(userId: string) {
     return null;
   }
 }
+export async function signInWithPassword(
+  pb: PocketBase,
+  email: string,
+  password: string,
+) {
+  try {
+    const authData = await pb.collection("users").authWithPassword(
+      email,
+      password,
+    );
+    return authData;
+  } catch (error) {
+    console.log("Error signing in user", error);
+    return null;
+  }
+}
+
 export async function getAuthCookie(
   cookieStore:
     | NextRequest["cookies"]
