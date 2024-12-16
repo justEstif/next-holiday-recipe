@@ -36,9 +36,8 @@ export async function pbServer(): Promise<PocketBase> {
   return pb;
 }
 
-export async function getLoggedInUser() {
+export async function getLoggedInUser(pb: PocketBase) {
   try {
-    const pb = await pbServer();
     const currentUser = pb.authStore.model;
     return currentUser;
   } catch (error) {
@@ -47,9 +46,8 @@ export async function getLoggedInUser() {
   }
 }
 
-export async function getUser(userId: string) {
+export async function getUser(pb: PocketBase, userId: string) {
   try {
-    const pb = await pbServer();
     const userData = await pb.collection("users").getOne<User>(userId, {
       expand: "relField1,relField2.subRelField",
     });
@@ -59,6 +57,7 @@ export async function getUser(userId: string) {
     return null;
   }
 }
+
 export async function signInWithPassword(
   pb: PocketBase,
   email: string,
