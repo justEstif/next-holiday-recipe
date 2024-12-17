@@ -77,14 +77,14 @@ export function setAuthCookie(
   cookieStore: CookieStore,
 ) {
   try {
-    const authCookie = pb.authStore.exportToCookie({
-      path: "/",
-      httpOnly: false,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
-    });
+    const authCookie = pb.authStore.exportToCookie();
     const [_cookieName, cookieValue] = authCookie.split("=");
-    cookieStore.set(PB_COOKIE_NAME, cookieValue);
+    cookieStore.set(PB_COOKIE_NAME, cookieValue, {
+      path: "/",
+      httpOnly: true,
+      sameSite: "strict",
+      secure: true,
+    });
   } catch (error) {
     console.log("Error signing in user", error);
     return null;
