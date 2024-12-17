@@ -17,7 +17,6 @@ export default function SignInForm() {
         name="email"
         placeholder="Email"
         type="email"
-        required
       />
       <input
         id="password"
@@ -25,7 +24,13 @@ export default function SignInForm() {
         placeholder="Password"
         minLength={8}
         type="password"
-        required
+      />
+      <input
+        id="confirmPassword"
+        name="confirmPassword"
+        placeholder="Confirm Password"
+        minLength={8}
+        type="password"
       />
       <button type="submit">Sign in</button>
     </form>
