@@ -6,7 +6,7 @@ import { cookies } from "next/headers";
 export default async function AuthButtons() {
   const cookieStore = await cookies();
   const pb = await pbServer(cookieStore);
-  const currentUser = await getLoggedInUser(pb);
+  const currentUser = getLoggedInUser(pb);
 
   return (
     <>

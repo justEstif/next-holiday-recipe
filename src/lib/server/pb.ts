@@ -26,7 +26,7 @@ export async function pbServer(
   return pb;
 }
 
-export async function getLoggedInUser(pb: PocketBase) {
+export function getLoggedInUser(pb: PocketBase) {
   try {
     const currentUser = pb.authStore.model;
     return currentUser;
@@ -65,14 +65,14 @@ export async function signInWithPassword(
   }
 }
 
-export async function getAuthCookie(
+export function getAuthCookie(
   cookieStore: CookieStore,
 ) {
   const authCookie = cookieStore.get(PB_COOKIE_NAME);
   return authCookie?.value || null;
 }
 
-export async function setAuthCookie(
+export function setAuthCookie(
   pb: PocketBase,
   cookieStore: CookieStore,
 ) {
@@ -84,7 +84,7 @@ export async function setAuthCookie(
       sameSite: "lax",
     });
     const [_cookieName, cookieValue] = authCookie.split("=");
-    cookieStore.set("pb_auth", cookieValue);
+    cookieStore.set(PB_COOKIE_NAME, cookieValue);
   } catch (error) {
     console.log("Error signing in user", error);
     return null;
