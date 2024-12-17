@@ -1,34 +1,24 @@
-"use client";
-import { signIn } from "@/actions";
-import { useFormState } from "react-dom";
+import SignInForm from "@/components/SignInForm";
+import { getLoggedInUser, pbServer } from "@/lib/server/pb";
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 
-const initialState = {
-  message: "",
-};
+export default async function SignInPage() {
+  const cookieStore = await cookies();
+  const pb = await pbServer(cookieStore);
+  const currentUser = getLoggedInUser(pb);
 
-export default async function SignUpPage() {
-  const [state, formAction] = useFormState(signIn, initialState);
+  if (currentUser) {
+    redirect("/");
+  }
 
+  // TODO: add form state
+  // TODO: redirect if user is logged in
 
   return (
     <section>
       <h1>Sign in</h1>
-      <form action={formAction}>
-        <input
-          id="email"
-          name="email"
-          placeholder="Email"
-          type="email"
-        />
-        <input
-          id="password"
-          name="password"
-          placeholder="Password"
-          minLength={8}
-          type="password"
-        />
-        <button type="submit">Sign in</button>
-      </form>
+      <SignInForm />
     </section>
   );
 }
