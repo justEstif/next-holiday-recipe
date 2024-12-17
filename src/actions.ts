@@ -1,7 +1,7 @@
 "use server";
 import { z } from "zod";
 import { revalidatePath } from "next/cache";
-import { pbServer, signInWithPassword } from "./lib/server/pb";
+import { pbServer, setAuthCookie, signInWithPassword } from "./lib/server/pb";
 import { cookies } from "next/headers";
 
 export async function signIn(_prevState: {
@@ -36,6 +36,7 @@ export async function signIn(_prevState: {
     validatedFields.data.password,
   );
   if (authData) {
+    setAuthCookie(pb, cookieStore);
     revalidatePath("/sign-in");
     return {
       message: "Signed in",
