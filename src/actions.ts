@@ -1,7 +1,12 @@
 "use server";
 import { z } from "zod";
 import { revalidatePath } from "next/cache";
-import { pbServer, setAuthCookie, signInWithPassword } from "./lib/server/pb";
+import {
+  createUser,
+  pbServer,
+  setAuthCookie,
+  signInWithPassword,
+} from "./lib/server/pb";
 import { cookies } from "next/headers";
 
 export async function signIn(_prevState: {
@@ -51,37 +56,49 @@ export async function signIn(_prevState: {
 export async function signUp(_prevState: {
   message: string;
 }, formData: FormData) {
+  const errorMessage = {
+    message: "Failed to sign up",
+  };
+
   const schema = z.object({
+    name: z.string({
+      invalid_type_error: "Invalid name",
+    }),
     email: z.string({
       invalid_type_error: "Invalid Email",
     }).email(),
     password: z.string({
       invalid_type_error: "Invalid Password",
     }),
-    confirmPassword: z.string({
-      invalid_type_error: "Invalid Password",
+    passwordConfirm: z.string({
+      invalid_type_error: "Invalid Password Confirm",
     }),
-  }).refine((data) => data.password === data.confirmPassword, {
-    message: "Passwords don't match",
-    path: ["confirmPassword"],
   });
 
   const validatedFields = schema.safeParse({
+    name: formData.get("name"),
     email: formData.get("email"),
     password: formData.get("password"),
+    passwordConfirm: formData.get("passwordConfirm"),
   });
 
   if (!validatedFields.success) {
-    return {
-      message: "Failed to sign in",
-    };
+    return errorMessage;
   }
+
+  console.log("validatedFields");
 
   const cookieStore = await cookies();
   const pb = await pbServer(cookieStore);
 
-  // TODO: figure out how to create a new user
-  await pb.collection("users").create(validatedFields);
+  const user = await createUser(pb, validatedFields.data);
+  if (!user) {
+    return errorMessage;
+  }
+  return {
+    message: "Created user"
+  }
+  console.log("created user");
   const authData = await signInWithPassword(
     pb,
     validatedFields.data.email,
@@ -89,13 +106,10 @@ export async function signUp(_prevState: {
   );
   if (authData) {
     setAuthCookie(pb, cookieStore);
-    revalidatePath("/sign-in");
     return {
-      message: "Signed in",
+      message: "Signed up",
     };
   } else {
-    return {
-      message: "Failed to sign in",
-    };
+    return errorMessage;
   }
 }

@@ -1,6 +1,7 @@
-import SignInForm from "@/components/SignInForm";
+import SignUpForm from "@/components/SignUpForm";
 import { getLoggedInUser, pbServer } from "@/lib/server/pb";
 import { cookies } from "next/headers";
+import Link from "next/link";
 import { redirect } from "next/navigation";
 
 export default async function SignInPage() {
@@ -18,7 +19,8 @@ export default async function SignInPage() {
   return (
     <section>
       <h1>Sign up</h1>
-      <SignInForm />
+      <SignUpForm />
+      Already have an account? <Link href="/sign-in">Sign in</Link>
     </section>
   );
 }

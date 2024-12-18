@@ -1,6 +1,6 @@
 import PocketBase from "pocketbase";
-import { CookieStore, User } from "@/types";
-
+import { CookieStore, User, UserCreate } from "@/types";
+// TODO: Figure out what to do with ClientResponseError for better error messages
 export const PB_URL = process.env.POCKETBASE_URL || "http://127.0.0.1:8090";
 export const PB_COOKIE_NAME = "pb_auth";
 
@@ -60,7 +60,20 @@ export async function signInWithPassword(
     );
     return authData;
   } catch (error) {
-    console.log("Error signing in user", error);
+    console.error("Error signing in user", error);
+    return null;
+  }
+}
+
+export async function createUser(
+  pb: PocketBase,
+  userData: UserCreate,
+) {
+  try {
+    const user = await pb.collection("users").create<User>(userData);
+    return user;
+  } catch (error) {
+    console.error("Error creating user", error);
     return null;
   }
 }
@@ -86,7 +99,7 @@ export function setAuthCookie(
       secure: true,
     });
   } catch (error) {
-    console.log("Error signing in user", error);
+    console.error("Error setting auth cookie", error);
     return null;
   }
 }

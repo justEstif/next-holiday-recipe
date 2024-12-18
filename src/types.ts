@@ -28,6 +28,15 @@ export type Recipe = {
   tags: string; // JSON string or object, depending on your handling
 };
 
+export type UserCreate = {
+  email: string;
+  password: string;
+  passwordConfirm: string;
+  emailVisibility?: boolean;
+  username?: string;
+  name?: string;
+};
+
 export type CookieStore =
   | NextRequest["cookies"]
   | NextResponse["cookies"]
