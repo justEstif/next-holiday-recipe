@@ -10,7 +10,7 @@ export default async function SignUpPage() {
   const currentUser = getLoggedInUser(pb);
 
   if (currentUser) {
-    redirect("/");
+    redirect("/account");
   }
 
   // TODO: add form state

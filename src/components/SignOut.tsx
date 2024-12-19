@@ -1,6 +1,5 @@
-import { getLoggedInUser, PB_COOKIE_NAME, pbServer } from "@/lib/server/pb";
+import { PB_COOKIE_NAME, pbServer } from "@/lib/server/pb";
 import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
 
 async function signOut() {
   "use server";

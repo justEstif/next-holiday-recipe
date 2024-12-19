@@ -20,7 +20,7 @@ export default async function SignInPage() {
     <section>
       <h1>Sign in</h1>
       <SignInForm />
-      New?{" "}<Link href="/sign-up">Sign up</Link>
+      Don't have an account? <Link href="/sign-up">Sign up</Link>
     </section>
   );
 }

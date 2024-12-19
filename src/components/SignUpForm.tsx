@@ -1,14 +1,14 @@
 "use client";
 import { signUp } from "@/actions";
 import { useActionState } from "react";
+import FormMessage from "./FormMessage";
 
 const initialState = {
   message: "",
 };
 
 export default function SignUpForm() {
-  const [_state, formAction] = useActionState(signUp, initialState);
-  // TODO: add form state
+  const [state, formAction] = useActionState(signUp, initialState);
 
   return (
     <form action={formAction}>
@@ -42,6 +42,7 @@ export default function SignUpForm() {
         type="password"
         required
       />
+      <FormMessage message={state?.message} />
       <button type="submit">Sign up</button>
     </form>
   );

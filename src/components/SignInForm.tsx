@@ -1,14 +1,14 @@
 "use client";
 import { signIn } from "@/actions";
 import { useActionState } from "react";
+import FormMessage from "./FormMessage";
 
 const initialState = {
   message: "",
 };
 
 export default function SignInForm() {
-  const [_state, formAction] = useActionState(signIn, initialState);
-  // TODO: add form state
+  const [state, formAction] = useActionState(signIn, initialState);
 
   return (
     <form action={formAction}>
@@ -27,6 +27,8 @@ export default function SignInForm() {
         type="password"
         required
       />
+
+      <FormMessage message={state?.message} />
       <button type="submit">Sign in</button>
     </form>
   );

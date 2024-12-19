@@ -1,6 +1,6 @@
 import PocketBase, { ClientResponseError } from "pocketbase";
 import { CookieStore, User, UserCreate } from "@/types";
-// TODO: Figure out what to do with ClientResponseError for better error messages
+
 export const PB_URL = process.env.POCKETBASE_URL || "http://127.0.0.1:8090";
 export const PB_COOKIE_NAME = "pb_auth";
 
