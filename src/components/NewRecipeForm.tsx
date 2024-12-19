@@ -1,23 +1,64 @@
 "use client";
-import { signIn } from "@/actions";
-import { useActionState } from "react";
+import { createRecipe } from "@/actions";
+import { ChangeEvent, useActionState, useState } from "react";
 import FormMessage from "./FormMessage";
 
-const initialState = {
-  message: "",
+type DynamicInputProps = {
+  name: string;
+  label: string;
 };
 
-export default function NewRecipeForm() {
-  const [state, formAction] = useActionState(signIn, initialState);
+function DynamicInput({ name, label }: DynamicInputProps) {
+  // Always start with one empty field
+  const [fields, setFields] = useState<string[]>([""]);
 
-  // TODO: Create dynamic input fields for the json objects
+  const handleFieldChange = (
+    index: number,
+    event: ChangeEvent<HTMLInputElement>,
+  ) => {
+    const newFields = [...fields];
+    newFields[index] = event.target.value;
+    setFields(newFields);
+  };
+
+  const addField = () => {
+    // Check if the last field is not empty before adding a new field
+    if (fields[fields.length - 1].trim() !== "") {
+      setFields([...fields, ""]);
+    } else {
+      alert("Please fill out the previous field before adding a new one.");
+    }
+  };
+
+  return (
+    <fieldset>
+      <legend>{label}</legend>
+      {fields.map((value, index) => (
+        <div key={index}>
+          <input
+            type="text"
+            name={`${name}[${index + 1}]`}
+            value={value}
+            onChange={(e) => handleFieldChange(index, e)}
+            required={index === 0}
+          />
+        </div>
+      ))}
+      <button type="button" onClick={addField}>Add {label}</button>
+    </fieldset>
+  );
+}
+
+export default function NewRecipeForm() {
+  const [state, formAction] = useActionState(createRecipe, { message: "" });
+  console.log(state);
   return (
     <form action={formAction}>
       <label>
         Title
         <input
           id="recipeTitle"
-          name="recipeTitle"
+          name="title"
           type="text"
           required
         />
@@ -27,37 +68,19 @@ export default function NewRecipeForm() {
         <input
           type="file"
           id="recipeImage"
-          name="recipeImage"
-          required
+          name="image"
         />
       </label>
-      <label>
-        Ingredients
-        <input
-          type="text"
-          id="recipeIngredients"
-          name="recipeIngredients"
-          required
-        />
-      </label>
-      <label>
-        Steps
-        <input
-          type="text"
-          id="recipeSteps"
-          name="recipeSteps"
-          required
-        />
-      </label>
-      <label>
-        Tags
-        <input
-          type="text"
-          id="recipeTags"
-          name="recipeTags"
-          required
-        />
-      </label>
+
+      {/* Ingredients - start with one empty field */}
+      <DynamicInput name="ingredients" label="Ingredients" />
+
+      {/* Steps - start with one empty field */}
+      <DynamicInput name="steps" label="Steps" />
+
+      {/* Tags - now also start with one empty field */}
+      <DynamicInput name="tags" label="Tags" />
+
       <FormMessage message={state?.message} />
       <button type="submit">Preview Recipe</button>
     </form>

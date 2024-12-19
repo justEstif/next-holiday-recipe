@@ -3,12 +3,8 @@ import { signUp } from "@/actions";
 import { useActionState } from "react";
 import FormMessage from "./FormMessage";
 
-const initialState = {
-  message: "",
-};
-
 export default function SignUpForm() {
-  const [state, formAction] = useActionState(signUp, initialState);
+  const [state, formAction] = useActionState(signUp, { message: "" });
 
   return (
     <form action={formAction}>

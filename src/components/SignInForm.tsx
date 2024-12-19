@@ -2,12 +2,9 @@
 import { signIn } from "@/actions";
 import { useActionState } from "react";
 import FormMessage from "./FormMessage";
-const initialState = {
-  message: "",
-};
 
 export default function SignInForm() {
-  const [state, formAction] = useActionState(signIn, initialState);
+  const [state, formAction] = useActionState(signIn, { message: "" });
 
   // TODO: Add labels to the input tags
   return (

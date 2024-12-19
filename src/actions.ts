@@ -112,3 +112,14 @@ export async function signUp(_prevState: {
     return errorMessage;
   }
 }
+
+export async function createRecipe(_prevState: {
+  message: string;
+}, formData: FormData) {
+  const errorMessage = {
+    message: "Failed to create recipe",
+  };
+
+  console.log(formData);
+  return errorMessage;
+}
