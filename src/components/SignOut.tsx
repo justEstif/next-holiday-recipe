@@ -1,4 +1,4 @@
-import { PB_COOKIE_NAME, pbServer } from "@/lib/server/pb";
+import { getLoggedInUser, PB_COOKIE_NAME, pbServer } from "@/lib/server/pb";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
@@ -10,14 +10,13 @@ async function signOut() {
     const pb = await pbServer(cookieStore);
     (await cookies()).delete(PB_COOKIE_NAME);
     pb.authStore.clear();
-    redirect("/sign-in")
   } catch (error) {
     console.error("Failed to sign out:", error);
     throw error;
   }
 }
 
-export default function SignOut() {
+export default async function SignOut() {
   return (
     <form action={signOut}>
       <button type="submit">Sign Out</button>
