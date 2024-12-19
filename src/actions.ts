@@ -86,19 +86,18 @@ export async function signUp(_prevState: {
     return errorMessage;
   }
 
-  console.log("validatedFields");
-
   const cookieStore = await cookies();
   const pb = await pbServer(cookieStore);
 
-  const user = await createUser(pb, validatedFields.data);
+  const user = await createUser(pb, {
+    email: validatedFields.data.email,
+    password: validatedFields.data.password,
+    passwordConfirm: validatedFields.data.passwordConfirm,
+  });
+
   if (!user) {
     return errorMessage;
   }
-  return {
-    message: "Created user"
-  }
-  console.log("created user");
   const authData = await signInWithPassword(
     pb,
     validatedFields.data.email,
@@ -107,7 +106,7 @@ export async function signUp(_prevState: {
   if (authData) {
     setAuthCookie(pb, cookieStore);
     return {
-      message: "Signed up",
+      message: "Signed in",
     };
   } else {
     return errorMessage;

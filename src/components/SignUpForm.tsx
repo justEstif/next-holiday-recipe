@@ -9,7 +9,7 @@ const initialState = {
 export default function SignUpForm() {
   const [_state, formAction] = useActionState(signUp, initialState);
   // TODO: add form state
-console.log(_state)
+
   return (
     <form action={formAction}>
       <input

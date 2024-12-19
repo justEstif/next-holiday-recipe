@@ -1,4 +1,4 @@
-import PocketBase from "pocketbase";
+import PocketBase, { ClientResponseError } from "pocketbase";
 import { CookieStore, User, UserCreate } from "@/types";
 // TODO: Figure out what to do with ClientResponseError for better error messages
 export const PB_URL = process.env.POCKETBASE_URL || "http://127.0.0.1:8090";
@@ -19,7 +19,8 @@ export async function pbServer(
       await pb.collection("users").authRefresh();
     }
   } catch (error) {
-    console.error("Auth refresh failed:", error);
+    const err = error as ClientResponseError;
+    console.error("Auth refresh failed:", err.toJSON());
     pb.authStore.clear();
   }
 
@@ -31,7 +32,8 @@ export function getLoggedInUser(pb: PocketBase) {
     const currentUser = pb.authStore.model;
     return currentUser;
   } catch (error) {
-    console.error("Error fetching current user", error);
+    const err = error as ClientResponseError;
+    console.error("Error fetching current user", err.toJSON());
     return null;
   }
 }
@@ -43,7 +45,8 @@ export async function getUser(pb: PocketBase, userId: string) {
     });
     return userData;
   } catch (error) {
-    console.error("Error fetching user data", error);
+    const err = error as ClientResponseError;
+    console.error("Error fetching user data", err.toJSON());
     return null;
   }
 }
@@ -60,7 +63,8 @@ export async function signInWithPassword(
     );
     return authData;
   } catch (error) {
-    console.error("Error signing in user", error);
+    const err = error as ClientResponseError;
+    console.error("Error signing in user", err.toJSON());
     return null;
   }
 }
@@ -73,7 +77,8 @@ export async function createUser(
     const user = await pb.collection("users").create<User>(userData);
     return user;
   } catch (error) {
-    console.error("Error creating user", error);
+    const err = error as ClientResponseError;
+    console.error("Error creating user", err.toJSON());
     return null;
   }
 }
@@ -99,7 +104,8 @@ export function setAuthCookie(
       secure: true,
     });
   } catch (error) {
-    console.error("Error setting auth cookie", error);
+    const err = error as ClientResponseError;
+    console.error("Error setting auth cookie", err.toJSON());
     return null;
   }
 }

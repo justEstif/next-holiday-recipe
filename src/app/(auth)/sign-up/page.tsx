@@ -4,7 +4,7 @@ import { cookies } from "next/headers";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
-export default async function SignInPage() {
+export default async function SignUpPage() {
   const cookieStore = await cookies();
   const pb = await pbServer(cookieStore);
   const currentUser = getLoggedInUser(pb);
