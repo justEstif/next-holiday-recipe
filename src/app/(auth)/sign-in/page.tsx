@@ -13,9 +13,6 @@ export default async function SignInPage() {
     redirect("/");
   }
 
-  // TODO: add form state
-  // TODO: redirect if user is logged in
-
   return (
     <section>
       <h1>Sign in</h1>

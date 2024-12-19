@@ -1,7 +1,10 @@
+import NewRecipeForm from "@/components/NewRecipeForm";
+
 export default function Page() {
   return (
     <section className="container">
-      <h1>Recipe</h1>
+      <h1>New Recipes</h1>
+      <NewRecipeForm />
     </section>
   );
 }

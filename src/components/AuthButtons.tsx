@@ -14,6 +14,12 @@ export default async function AuthButtons() {
         ? (
           <ul>
             <li>
+              <Link href="/recipes/new">New Recipes</Link>
+            </li>
+            <li>
+              <Link href="/account">Account</Link>
+            </li>
+            <li>
               <SignOut />
             </li>
           </ul>
