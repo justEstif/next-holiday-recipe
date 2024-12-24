@@ -1,12 +1,14 @@
 {
 	"name": "next-holiday-recipe",
 	"version": "0.1.0",
+	"type": "module",
 	"private": true,
 	"scripts": {
 		"dev": "pnpm run pb:serve & next dev --turbopack",
 		"build": "next build",
 		"start": "next start",
 		"lint": "biome check .",
+		"pb:seed": "node ./src/seed",
 		"pb:serve": "./server/pb serve"
 	},
 	"dependencies": {
