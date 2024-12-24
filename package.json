@@ -7,6 +7,7 @@
 		"build": "next build",
 		"start": "next start",
 		"lint": "biome check .",
+		"pb:seed": "node ./src/seed",
 		"pb:serve": "./server/pb serve"
 	},
 	"dependencies": {
