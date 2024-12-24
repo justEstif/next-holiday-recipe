@@ -1,27 +1,27 @@
 {
-  "name": "next-holiday-recipe",
-  "version": "0.1.0",
-  "private": true,
-  "scripts": {
-    "dev": "npm run pb:serve & next dev --turbopack",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint",
-    "pb:serve": "./server/pb serve"
-  },
-  "dependencies": {
-    "@picocss/pico": "^2.0.6",
-    "next": "15.0.3",
-    "pocketbase": "^0.21.5",
-    "react": "19.0.0-rc-66855b96-20241106",
-    "react-dom": "19.0.0-rc-66855b96-20241106"
-  },
-  "devDependencies": {
-    "@types/node": "^20",
-    "@types/react": "^18",
-    "@types/react-dom": "^18",
-    "eslint": "^8",
-    "eslint-config-next": "15.0.3",
-    "typescript": "^5"
-  }
+	"name": "next-holiday-recipe",
+	"version": "0.1.0",
+	"private": true,
+	"scripts": {
+		"dev": "pnpm run pb:serve & next dev --turbopack",
+		"build": "next build",
+		"start": "next start",
+		"lint": "biome check .",
+		"pb:serve": "./server/pb serve"
+	},
+	"dependencies": {
+		"@picocss/pico": "^2.0.6",
+		"next": "15.0.3",
+		"pocketbase": "^0.21.5",
+		"react": "19.0.0-rc-66855b96-20241106",
+		"react-dom": "19.0.0-rc-66855b96-20241106",
+		"zod": "^3.24.1"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "1.9.4",
+		"@types/node": "^20",
+		"@types/react": "^18",
+		"@types/react-dom": "^18",
+		"typescript": "^5"
+	}
 }

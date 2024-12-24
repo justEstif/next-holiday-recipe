@@ -1,36 +1,41 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-## Getting Started
+- Using this [blog](https://dev.to/tigawanna/nextjs13-app-directory-authentication-with-pocketbase-2p6d)
 
-First, run the development server:
+# **Public Pages (No Authentication Required)**
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- **Home Page** (`/`)
+- **Recipe Listing Page** (`/recipes`)
+- **Recipe Details Page** (`/recipes/[recipeId]`)
+- **User Profile Page** (`/users/[userId]`)
+- **Search Results Page** (`/search`)
+- **Viewing Comments and Ratings** (on Recipe Details Page)
+- **Authentication Pages** (`/login`, `/auth/callback`)
+- **Error and Status Pages** (`/404`, `/500`)
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+# **Protected Pages (Authentication Required)**
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- **Submit New Recipe Page** (`/recipes/new`)
+- **Edit Recipe Page** (`/recipes/[recipeId]/edit`)
+- **Edit Profile Page** (`/users/[userId]/edit`)
+- **Posting Comments and Ratings** (on Recipe Details Page)
+    - the component should be hidden
+- **Logout Page** (`/sign-out`)
+- **Admin Dashboard** (`/admin`) - _If implemented; requires admin role._
 
-## Learn More
+---
 
-To learn more about Next.js, take a look at the following resources:
+# **Public API Endpoints**
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- **Fetching recipes, recipe details, user profiles, and search results.**
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
+# **Protected API Endpoints**
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- **Creating, editing, or deleting recipes** (only by the recipe's author or admin).
+- **Posting comments or ratings.**
+- **Editing user profiles** (only by the profile owner).
+- **Admin actions** like deleting any user's recipe or comment.

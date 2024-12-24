@@ -1,5 +1,7 @@
+import NavBar from "@/components/NavBar";
 import "@picocss/pico";
 import type { Metadata } from "next";
+import "./global.css";
 
 export const metadata: Metadata = {
   title: "Holiday Recipe Finder",
@@ -13,7 +15,16 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        <header className="container">
+          <NavBar />
+        </header>
+        <main className="container main">{children}</main>
+        <footer className="container footer">
+          <hr />
+          estifanos
+        </footer>
+      </body>
     </html>
   );
 }
