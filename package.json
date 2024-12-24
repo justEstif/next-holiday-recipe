@@ -1,7 +1,6 @@
 {
 	"name": "next-holiday-recipe",
 	"version": "0.1.0",
-	"type": "module",
 	"private": true,
 	"scripts": {
 		"dev": "pnpm run pb:serve & next dev --turbopack",
