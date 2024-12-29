@@ -1,4 +1,4 @@
-import Client from "pocketbase";
+import type Client from "pocketbase";
 
 const seedData = {
 	users: [

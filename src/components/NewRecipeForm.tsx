@@ -1,9 +1,9 @@
 "use client";
 import { createRecipe } from "@/actions";
-import { useActionState, useEffect, useState } from "react";
-import FormMessage from "./FormMessage";
-import DynamicInput from "./DynamicInput";
 import { redirect } from "next/navigation";
+import { useActionState, useEffect, useState } from "react";
+import DynamicInput from "./DynamicInput";
+import FormMessage from "./FormMessage";
 
 export default function NewRecipeForm() {
 	const [state, formAction, pending] = useActionState(createRecipe, {

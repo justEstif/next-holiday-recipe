@@ -1,5 +1,5 @@
 import { pbServer } from "@/lib/server/pb";
-import { NextRequest, NextResponse } from "next/server";
+import { type NextRequest, NextResponse } from "next/server";
 
 // TODO: Improve the protected routes list
 const PROTECTED_ROUTES = [
@@ -12,7 +12,7 @@ const PROTECTED_ROUTES = [
 const isProtectedRoute = (pathname: string) => {
 	return PROTECTED_ROUTES.some((route) => {
 		// Convert route patterns with dynamic parameters into regular expressions
-		const routePattern = "^" + route.replace(/:\w+/g, "[^/]+") + "$";
+		const routePattern = `^${route.replace(/:\w+/g, "[^/]+")}$`;
 		const regex = new RegExp(routePattern);
 		return regex.test(pathname);
 	});

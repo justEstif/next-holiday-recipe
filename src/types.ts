@@ -1,5 +1,5 @@
-import { NextRequest, NextResponse } from "next/server";
-import { ReadonlyRequestCookies } from "next/dist/server/web/spec-extension/adapters/request-cookies";
+import type { ReadonlyRequestCookies } from "next/dist/server/web/spec-extension/adapters/request-cookies";
+import type { NextRequest, NextResponse } from "next/server";
 
 export interface User {
 	avatar: string;

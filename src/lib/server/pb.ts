@@ -1,5 +1,5 @@
-import PocketBase, { ClientResponseError } from "pocketbase";
-import { CookieStore, User, UserCreate } from "@/types";
+import type { CookieStore, User, UserCreate } from "@/types";
+import PocketBase, { type ClientResponseError } from "pocketbase";
 
 export const PB_URL = process.env.POCKETBASE_URL || "http://127.0.0.1:8090";
 export const PB_COOKIE_NAME = "pb_auth";

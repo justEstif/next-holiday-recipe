@@ -1,5 +1,5 @@
 import { pbServer } from "@/lib/server/pb";
-import { type User } from "@/types";
+import type { User } from "@/types";
 import { cookies } from "next/headers";
 
 async function getUser(userId: string) {
@@ -43,7 +43,7 @@ export default async function Page({
 	return (
 		<section className="container">
 			<h1>Editing Profile</h1>
-			<form></form>
+			<form />
 		</section>
 	);
 }

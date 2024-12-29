@@ -12,7 +12,8 @@
 			".next/",
 			"**/__tests__/**",
 			"*.config.js",
-			"server/pb_migrations/**"
+			"server/pb_migrations/**",
+			"server/pb_data/**"
 		]
 	},
 	"formatter": {

@@ -1,6 +1,8 @@
 "use server";
-import { z } from "zod";
 import { revalidatePath } from "next/cache";
+import { cookies } from "next/headers";
+import { ClientResponseError } from "pocketbase";
+import { z } from "zod";
 import {
 	createUser,
 	getLoggedInUser,
@@ -8,8 +10,6 @@ import {
 	setAuthCookie,
 	signInWithPassword,
 } from "./lib/server/pb";
-import { cookies } from "next/headers";
-import { ClientResponseError } from "pocketbase";
 
 export async function signIn(
 	_prevState: {
@@ -53,11 +53,10 @@ export async function signIn(
 		return {
 			message: "Signed in",
 		};
-	} else {
-		return {
-			message: "Failed to sign in",
-		};
 	}
+	return {
+		message: "Failed to sign in",
+	};
 }
 
 export async function signUp(
@@ -120,9 +119,8 @@ export async function signUp(
 		return {
 			message: "Signed in",
 		};
-	} else {
-		return errorMessage;
 	}
+	return errorMessage;
 }
 
 export async function createRecipe(
