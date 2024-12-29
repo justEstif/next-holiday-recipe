@@ -10,8 +10,6 @@ export default async function Page() {
 
 	if (!currentUser) redirect("/sign-in");
 
-	console.log(currentUser);
-
 	return (
 		<section className="container">
 			<h1>New Recipe</h1>

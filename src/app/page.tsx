@@ -4,11 +4,12 @@ import Client from "pocketbase";
 import { sliceArrayIntoBatches } from "@/utils";
 import { type Recipe } from "@/types";
 import { pbServer } from "@/lib/server/pb";
-import { seed } from "@/seed";
 
-async function getRecipes(pb: Client) {
+async function getPublishedRecipes(pb: Client) {
 	try {
-		const recipes = await pb.collection("recipes").getList<Recipe>(1, 50);
+		const recipes = await pb.collection("recipes").getList<Recipe>(1, 50, {
+			filter: "published = true",
+		});
 		return recipes;
 	} catch (error) {
 		console.error("Error getting recipes", error);
@@ -19,9 +20,8 @@ async function getRecipes(pb: Client) {
 export default async function Home() {
 	const cookieStore = await cookies();
 	const pb = await pbServer(cookieStore);
-	// await seed(pb);
 
-	const recipes = await getRecipes(pb);
+	const recipes = await getPublishedRecipes(pb);
 	const batchedRecipes = sliceArrayIntoBatches(recipes?.items || [], 3);
 
 	return (
