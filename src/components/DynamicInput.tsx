@@ -25,21 +25,31 @@ export default function DynamicInput({ name, label }: DynamicInputProps) {
 		}
 	};
 
+	const removeField = (indexToRemove: number) => {
+		if (fields.length > 1) {
+			// Ensure we keep at least one field
+			setFields(fields.filter((_, index) => index !== indexToRemove));
+		}
+	};
+
 	return (
 		<fieldset>
 			<legend>{label}</legend>
 			{fields.map((value, index) => (
-				<div key={index}>
+				<div key={index} role="group">
 					<input
 						type="text"
-						// Change the name to use array syntax
 						name={name}
 						value={value}
 						onChange={(e) => handleFieldChange(index, e)}
 						required={index === 0}
-						// Add data-index to track position
 						data-index={index}
 					/>
+					{index > 0 && (
+						<button type="button" onClick={() => removeField(index)}>
+							Remove
+						</button>
+					)}
 				</div>
 			))}
 			<button type="button" onClick={addField}>
