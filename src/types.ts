@@ -23,10 +23,14 @@ export type Recipe = {
 	updated: string; // ISO date string
 	authorId: string;
 	title: string;
-	ingredients: string; // JSON string or object, depending on your handling
-	steps: string; // JSON string or object, depending on your handling
+	ingredients: string[]; // JSON string or object, depending on your handling
+	steps: string[]; // JSON string or object, depending on your handling
 	image: string; // Filename or file path
-	tags: string; // JSON string or object, depending on your handling
+	tags: string[]; // JSON string or object, depending on your handling
+	published: boolean;
+	expand?: {
+		author?: User;
+	};
 };
 
 export type UserCreate = {
