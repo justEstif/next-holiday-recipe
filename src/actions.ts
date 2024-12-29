@@ -128,41 +128,51 @@ export async function signUp(
 export async function createRecipe(
 	_prevState: {
 		message: string;
+		status?: "error" | "success";
 	},
 	formData: FormData,
 ) {
-	const errorMessage = {
-		message: "Failed to create recipe",
-	};
-
 	const schema = z.object({
-		title: z.string({
-			invalid_type_error: "Invalid title",
-		}),
+		title: z
+			.string({
+				required_error: "Title is required",
+				invalid_type_error: "Title must be text",
+			})
+			.min(1, "Title cannot be empty"),
 		ingredients: z.string().transform((str) => {
 			try {
 				const parsed = JSON.parse(str);
-				return z.array(z.string()).parse(parsed);
+				return z
+					.array(z.string().min(1, "Ingredient cannot be empty"))
+					.min(1, "At least one ingredient is required")
+					.parse(parsed);
 			} catch {
-				throw new Error("Invalid ingredients format");
+				throw new Error("Invalid ingredients format - please check your input");
 			}
 		}),
 		steps: z.string().transform((str) => {
 			try {
 				const parsed = JSON.parse(str);
-				return z.array(z.string()).parse(parsed);
+				return z
+					.array(z.string().min(1, "Step cannot be empty"))
+					.min(1, "At least one step is required")
+					.parse(parsed);
 			} catch {
-				throw new Error("Invalid steps format");
+				throw new Error("Invalid steps format - please check your input");
 			}
 		}),
 		tags: z.string().transform((str) => {
 			try {
 				const parsed = JSON.parse(str);
-				return z.array(z.string()).parse(parsed);
+				return z.array(z.string().min(1, "Tag cannot be empty")).parse(parsed);
 			} catch {
-				throw new Error("Invalid tags format");
+				throw new Error("Invalid tags format - please check your input");
 			}
 		}),
+		published: z.preprocess(
+			(val) => val === "true" || val === true,
+			z.boolean(),
+		),
 		image: z.instanceof(File).optional(),
 	});
 
@@ -173,20 +183,38 @@ export async function createRecipe(
 			steps: formData.get("steps"),
 			tags: formData.get("tags"),
 			image: formData.get("image"),
+			published: formData.get("published"),
 		});
 
 		if (!validatedFields.success) {
-			return errorMessage;
+			const errorMessages = validatedFields.error.issues
+				.map((issue) => issue.message)
+				.join(". ");
+			return {
+				message: errorMessages,
+				status: "error" as const,
+
+				id: undefined,
+			};
 		}
 
 		const cookieStore = await cookies();
 		const pb = await pbServer(cookieStore);
 		const currentUser = getLoggedInUser(pb);
 
-		// Create form data for PocketBase
+		if (!currentUser?.id) {
+			return {
+				message: "You must be logged in to create a recipe",
+				status: "error" as const,
+
+				id: undefined,
+			};
+		}
+
 		const pbFormData = new FormData();
-		pbFormData.append("author", currentUser?.id ?? "");
+		pbFormData.append("author", currentUser.id);
 		pbFormData.append("title", validatedFields.data.title);
+		pbFormData.append("published", validatedFields.data.published);
 		pbFormData.append(
 			"ingredients",
 			JSON.stringify(validatedFields.data.ingredients),
@@ -197,17 +225,45 @@ export async function createRecipe(
 			pbFormData.append("image", validatedFields.data.image);
 		}
 
-		// Create record in PocketBase
-		await pb.collection("recipes").create(pbFormData);
+		const newRecipe = await pb.collection("recipes").create(pbFormData);
+		revalidatePath("/");
 
-		revalidatePath("/recipes"); // Adjust this path as needed
 		return {
-			message: "Recipe created successfully",
+			message: validatedFields.data.published
+				? "Recipe published successfully! 🎉"
+				: "Recipe saved as draft successfully! 📝",
+			status: "success" as const,
+			id: newRecipe.id,
 		};
 	} catch (error) {
-		// const err = error as ClientResponseError;
-		// console.error(err.toJSON());
-		// console.error("Error creating recipe:", error);
-		return errorMessage;
+		if (error instanceof ClientResponseError) {
+			// Handle specific PocketBase errors
+			if (error.status === 400) {
+				return {
+					message: "Invalid recipe data. Please check your inputs.",
+					status: "error" as const,
+					id: undefined,
+				};
+			}
+			if (error.status === 401 || error.status === 403) {
+				return {
+					message: "You don't have permission to create recipes.",
+					status: "error" as const,
+					id: undefined,
+				};
+			}
+			return {
+				message: `Database error: ${error.message}`,
+				status: "error" as const,
+				id: undefined,
+			};
+		}
+
+		console.error("Error creating recipe:", error);
+		return {
+			message: "An unexpected error occurred. Please try again later.",
+			status: "error" as const,
+			id: undefined,
+		};
 	}
 }
