@@ -15,7 +15,7 @@ export interface User {
 }
 
 // TODO: improve the routes here
-export type Recipe = {
+export interface Recipe {
 	id: string;
 	collectionId: string;
 	collectionName: string;
@@ -31,16 +31,16 @@ export type Recipe = {
 	expand?: {
 		author?: User;
 	};
-};
+}
 
-export type UserCreate = {
+export interface UserCreate {
 	email: string;
 	password: string;
 	passwordConfirm: string;
 	emailVisibility?: boolean;
 	username?: string;
 	name?: string;
-};
+}
 
 export type CookieStore =
 	| NextRequest["cookies"]
