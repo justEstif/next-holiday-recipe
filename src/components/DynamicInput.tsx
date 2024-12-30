@@ -1,12 +1,23 @@
-import { type ChangeEvent, useState } from "react";
+import { type ChangeEvent, useEffect, useState } from "react";
 
 type DynamicInputProps = {
 	name: string;
 	label: string;
+	defaultValues?: string[];
 };
 
-export default function DynamicInput({ name, label }: DynamicInputProps) {
-	const [fields, setFields] = useState<string[]>([""]);
+export default function DynamicInput({
+	name,
+	label,
+	defaultValues = [""],
+}: DynamicInputProps) {
+	const [fields, setFields] = useState<string[]>(defaultValues);
+
+	useEffect(() => {
+		if (defaultValues.length > 0) {
+			setFields(defaultValues);
+		}
+	}, [defaultValues]);
 
 	const handleFieldChange = (
 		index: number,
