@@ -69,7 +69,7 @@ export default async function Home() {
 				<Fragment key={recipe.id}>
 					<Recipe
 						recipe={recipe as IRecipe}
-						imageSrc={pb.getFileUrl(recipe, recipe.image)}
+						imageSrc={pb.files.getURL(recipe, recipe?.image || "")}
 					/>
 				</Fragment>
 			))}
