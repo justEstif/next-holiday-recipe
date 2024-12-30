@@ -36,7 +36,6 @@ export default function EditRecipeForm({ recipe }: { recipe: IRecipe }) {
 			newFormData.set("image", image);
 		}
 
-		console.log(Object.fromEntries(newFormData));
 		return formAction(newFormData);
 	};
 
