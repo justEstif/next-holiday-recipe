@@ -1,7 +1,7 @@
 import type { ReadonlyRequestCookies } from "next/dist/server/web/spec-extension/adapters/request-cookies";
 import type { NextRequest, NextResponse } from "next/server";
 
-export interface User {
+export interface IUser {
 	avatar: string;
 	collectionId: string;
 	collectionName: string;
@@ -14,8 +14,7 @@ export interface User {
 	verified: boolean;
 }
 
-// TODO: improve the routes here
-export interface Recipe {
+export interface IRecipe {
 	id: string;
 	collectionId: string;
 	collectionName: string;
@@ -29,11 +28,11 @@ export interface Recipe {
 	tags: string[]; // JSON string or object, depending on your handling
 	published: boolean;
 	expand?: {
-		author?: User;
+		author?: IUser;
 	};
 }
 
-export interface UserCreate {
+export interface IUserCreate {
 	email: string;
 	password: string;
 	passwordConfirm: string;
@@ -42,7 +41,7 @@ export interface UserCreate {
 	name?: string;
 }
 
-export type CookieStore =
+export type TCookieStore =
 	| NextRequest["cookies"]
 	| NextResponse["cookies"]
 	| ReadonlyRequestCookies;

@@ -1,5 +1,5 @@
 import { getLoggedInUser, pbServer } from "@/lib/server/pb";
-import type { Recipe } from "@/types";
+import type { IRecipe } from "@/types";
 import { getFormattedDate } from "@/utils";
 import { cookies } from "next/headers";
 import Image from "next/image";
@@ -13,11 +13,10 @@ async function getPublishedRecipes(pb: Client) {
 			? `(published = true || author = "${currentUser.id}")`
 			: "published = true";
 
-		const recipes = await pb.collection("recipes").getList<Recipe>(1, 50, {
+		const recipes = await pb.collection("recipes").getList<IRecipe>(1, 50, {
 			filter,
 			expand: "author",
 		});
-		console.log(recipes);
 		return recipes;
 	} catch (error) {
 		console.error("Error getting recipes", error);
@@ -25,7 +24,7 @@ async function getPublishedRecipes(pb: Client) {
 	}
 }
 
-function Recipee({ recipe, imageSrc }: { recipe: Recipe; imageSrc?: string }) {
+function Recipe({ recipe, imageSrc }: { recipe: IRecipe; imageSrc?: string }) {
 	return (
 		<article>
 			<header className="recipeCardHeader">
@@ -68,8 +67,8 @@ export default async function Home() {
 			<h1>Home Page</h1>
 			{recipes?.items?.map((recipe) => (
 				<Fragment key={recipe.id}>
-					<Recipee
-						recipe={recipe as Recipe}
+					<Recipe
+						recipe={recipe as IRecipe}
 						imageSrc={pb.getFileUrl(recipe, recipe.image)}
 					/>
 				</Fragment>

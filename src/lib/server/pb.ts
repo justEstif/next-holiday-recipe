@@ -1,10 +1,10 @@
-import type { CookieStore, User, UserCreate } from "@/types";
+import type { IUser, IUserCreate, TCookieStore } from "@/types";
 import PocketBase, { type ClientResponseError } from "pocketbase";
 
 export const PB_URL = process.env.POCKETBASE_URL || "http://127.0.0.1:8090";
 export const PB_COOKIE_NAME = "pb_auth";
 
-export async function pbServer(cookieStore: CookieStore) {
+export async function pbServer(cookieStore: TCookieStore) {
 	const pb = new PocketBase(PB_URL);
 
 	const authCookie = cookieStore.get(PB_COOKIE_NAME);
@@ -38,7 +38,7 @@ export function getLoggedInUser(pb: PocketBase) {
 
 export async function getUser(pb: PocketBase, userId: string) {
 	try {
-		const userData = await pb.collection("users").getOne<User>(userId, {
+		const userData = await pb.collection("users").getOne<IUser>(userId, {
 			expand: "relField1,relField2.subRelField",
 		});
 		return userData;
@@ -66,9 +66,9 @@ export async function signInWithPassword(
 	}
 }
 
-export async function createUser(pb: PocketBase, userData: UserCreate) {
+export async function createUser(pb: PocketBase, userData: IUserCreate) {
 	try {
-		const user = await pb.collection("users").create<User>(userData);
+		const user = await pb.collection("users").create<IUser>(userData);
 		return user;
 	} catch (error) {
 		const err = error as ClientResponseError;
@@ -77,12 +77,12 @@ export async function createUser(pb: PocketBase, userData: UserCreate) {
 	}
 }
 
-export function getAuthCookie(cookieStore: CookieStore) {
+export function getAuthCookie(cookieStore: TCookieStore) {
 	const authCookie = cookieStore.get(PB_COOKIE_NAME);
 	return authCookie?.value || null;
 }
 
-export function setAuthCookie(pb: PocketBase, cookieStore: CookieStore) {
+export function setAuthCookie(pb: PocketBase, cookieStore: TCookieStore) {
 	try {
 		const authCookie = pb.authStore.exportToCookie();
 		const [_cookieName, cookieValue] = authCookie.split("=");

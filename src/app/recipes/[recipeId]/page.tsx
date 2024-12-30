@@ -1,12 +1,12 @@
 import { pbServer } from "@/lib/server/pb";
-import type { Recipe } from "@/types";
+import type { IRecipe } from "@/types";
 import { cookies } from "next/headers";
 
 async function getRecipe(recipeId: string) {
 	try {
 		const cookieStore = await cookies();
 		const pb = await pbServer(cookieStore);
-		const recipe = await pb.collection("recipes").getOne<Recipe>(recipeId, {
+		const recipe = await pb.collection("recipes").getOne<IRecipe>(recipeId, {
 			expand: "author",
 		});
 		return recipe;

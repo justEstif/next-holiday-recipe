@@ -1,5 +1,5 @@
 import { pbServer } from "@/lib/server/pb";
-import type { User } from "@/types";
+import type { IUser } from "@/types";
 import { cookies } from "next/headers";
 
 async function getUser(userId: string) {
@@ -7,7 +7,7 @@ async function getUser(userId: string) {
 		const cookieStore = await cookies();
 		const pb = await pbServer(cookieStore);
 
-		const userData = await pb.collection("users").getOne<User>(userId, {
+		const userData = await pb.collection("users").getOne<IUser>(userId, {
 			expand: "relField1,relField2.subRelField",
 		});
 		return userData;
@@ -18,13 +18,13 @@ async function getUser(userId: string) {
 }
 
 // TODO create update user option
-async function updateUser(userId: string, data: Partial<User>) {
+async function updateUser(userId: string, data: Partial<IUser>) {
 	try {
 		const cookieStore = await cookies();
 		const pb = await pbServer(cookieStore);
 		const updatedUserData = await pb
 			.collection("users")
-			.update<User>(userId, data);
+			.update<IUser>(userId, data);
 		return updatedUserData;
 	} catch (error) {
 		console.error("Error updating user", error);
