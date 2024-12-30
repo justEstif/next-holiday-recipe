@@ -27,7 +27,7 @@ export async function pbServer(cookieStore: TCookieStore) {
 
 export function getLoggedInUser(pb: PocketBase) {
 	try {
-		const currentUser = pb.authStore.model;
+		const currentUser = pb.authStore.record;
 		return currentUser;
 	} catch (error) {
 		const err = error as ClientResponseError;
