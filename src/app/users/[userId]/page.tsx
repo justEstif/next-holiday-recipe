@@ -17,11 +17,7 @@ export default async function Page({
 	return (
 		<section className="container">
 			<h1>User - {user?.username}</h1>
-			{canEdit && (
-				<Link href={`/user/${userId}/edit`}>
-					<button>Edit Profile</button>
-				</Link>
-			)}
+			{canEdit && <Link href={`/user/${userId}/edit`}>Edit Profile</Link>}
 		</section>
 	);
 }

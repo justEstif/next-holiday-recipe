@@ -6,6 +6,6 @@ import { type NextRequest, NextResponse } from "next/server";
 export async function middleware(request: NextRequest) {
 	withLogging(request);
 	await withUpdatedSession(request);
-	await withUser(request);
+	// await withUser(request);
 	return NextResponse.next();
 }
