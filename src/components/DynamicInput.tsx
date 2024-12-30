@@ -1,4 +1,4 @@
-import { type ChangeEvent, useEffect, useState } from "react";
+import { type ChangeEvent, useState } from "react";
 
 type DynamicInputProps = {
 	name: string;
@@ -12,12 +12,6 @@ export default function DynamicInput({
 	defaultValues = [""],
 }: DynamicInputProps) {
 	const [fields, setFields] = useState<string[]>(defaultValues);
-
-	useEffect(() => {
-		if (defaultValues.length > 0) {
-			setFields(defaultValues);
-		}
-	}, [defaultValues]);
 
 	const handleFieldChange = (
 		index: number,
@@ -38,7 +32,6 @@ export default function DynamicInput({
 
 	const removeField = (indexToRemove: number) => {
 		if (fields.length > 1) {
-			// Ensure we keep at least one field
 			setFields(fields.filter((_, index) => index !== indexToRemove));
 		}
 	};
@@ -51,7 +44,7 @@ export default function DynamicInput({
 					<input
 						type="text"
 						name={name}
-						value={value}
+						defaultValue={value}
 						onChange={(e) => handleFieldChange(index, e)}
 						required={index === 0}
 						data-index={index}
