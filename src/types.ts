@@ -20,11 +20,11 @@ export interface IRecipe {
 	collectionName: string;
 	created: string; // ISO date string
 	updated: string; // ISO date string
-	authorId: string;
+	author: string;
 	title: string;
 	ingredients: string[]; // JSON string or object, depending on your handling
 	steps: string[]; // JSON string or object, depending on your handling
-	image: string; // Filename or file path
+	image?: string; // Filename or file path
 	tags: string[]; // JSON string or object, depending on your handling
 	published: boolean;
 	expand?: {
