@@ -1,11 +1,13 @@
-import { pbServer } from "@/lib/server/pb";
+import { getLoggedInUser, pbServer } from "@/lib/server/pb";
 import type { IRecipe } from "@/types";
 import { cookies } from "next/headers";
+import { notFound } from "next/navigation";
+import type Client from "pocketbase";
+import Image from "next/image";
+import Link from "next/link";
 
-async function getRecipe(recipeId: string) {
+async function getRecipe(pb: Client, recipeId: string) {
 	try {
-		const cookieStore = await cookies();
-		const pb = await pbServer(cookieStore);
 		const recipe = await pb.collection("recipes").getOne<IRecipe>(recipeId, {
 			expand: "author",
 		});
@@ -22,9 +24,58 @@ export default async function Page({
 	params: Promise<{ recipeId: string }>;
 }) {
 	const { recipeId } = await params;
-	const recipe = await getRecipe(recipeId);
+	const cookieStore = await cookies();
+	const pb = await pbServer(cookieStore);
+	const recipe = await getRecipe(pb, recipeId);
+	const currentUser = getLoggedInUser(pb);
+
+	if (!recipe) {
+		notFound();
+	}
 
 	return (
-		<section className="container">{recipe && <h1>{recipe.title}</h1>}</section>
+		<section className="container">
+			<hgroup>
+				<h1>{recipe.title}</h1>
+				<p>{recipe.expand?.author?.username}</p>
+			</hgroup>
+
+			<section>
+				{recipe.tags.map((tag, id) => (
+					<span key={id}>#{tag} </span>
+				))}
+			</section>
+
+			<section>
+				{currentUser && currentUser.id === recipe.author && (
+					<Link href={`/recipes/${recipeId}/edit`}>
+						Edit <sup>🖉</sup>
+					</Link>
+				)}
+			</section>
+
+			{recipe?.image && (
+				<Image
+					src={pb.files.getURL(recipe, recipe.image)}
+					alt={`${recipe.title} image`}
+					width={300}
+					height={300}
+				/>
+			)}
+
+			<h2>Ingredients</h2>
+			<ul>
+				{recipe.ingredients.map((ingredient, id) => (
+					<li key={id}>{ingredient}</li>
+				))}
+			</ul>
+
+			<h2>Steps</h2>
+			<ol>
+				{recipe.steps.map((step, id) => (
+					<li key={id}>{step}</li>
+				))}
+			</ol>
+		</section>
 	);
 }
