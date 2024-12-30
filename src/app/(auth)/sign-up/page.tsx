@@ -13,9 +13,6 @@ export default async function SignUpPage() {
 		redirect("/account");
 	}
 
-	// TODO: add form state
-	// TODO: redirect if user is logged in
-
 	return (
 		<section>
 			<h1>Sign up</h1>

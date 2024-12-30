@@ -1,9 +1,9 @@
+import EditRecipeForm from "@/components/EditRecipeForm";
 import { getLoggedInUser, pbServer } from "@/lib/server/pb";
 import type { IRecipe } from "@/types";
 import { cookies } from "next/headers";
 import { forbidden, notFound, unauthorized } from "next/navigation";
 import type Client from "pocketbase";
-import EditRecipeForm from "@/components/EditRecipeForm";
 
 async function getRecipe(pb: Client, recipeId: string) {
 	try {
@@ -34,7 +34,7 @@ export default async function Page({
 		notFound();
 	}
 
-	if (recipe.author !== currentUser?.id) {
+	if (recipe.author !== currentUser.id) {
 		forbidden();
 	}
 

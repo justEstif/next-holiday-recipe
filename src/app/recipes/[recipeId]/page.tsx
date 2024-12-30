@@ -1,10 +1,10 @@
 import { getLoggedInUser, pbServer } from "@/lib/server/pb";
 import type { IRecipe } from "@/types";
 import { cookies } from "next/headers";
-import { notFound } from "next/navigation";
-import type Client from "pocketbase";
 import Image from "next/image";
 import Link from "next/link";
+import { notFound } from "next/navigation";
+import type Client from "pocketbase";
 
 async function getRecipe(pb: Client, recipeId: string) {
 	try {
@@ -27,11 +27,10 @@ export default async function Page({
 	const cookieStore = await cookies();
 	const pb = await pbServer(cookieStore);
 	const recipe = await getRecipe(pb, recipeId);
-	const currentUser = getLoggedInUser(pb);
-
 	if (!recipe) {
 		notFound();
 	}
+	const currentUser = getLoggedInUser(pb);
 
 	return (
 		<section className="container">
