@@ -1,6 +1,9 @@
 "use server";
+import { createRecipeSchema, editRecipeSchema } from "@/schemas";
 import { revalidatePath } from "next/cache";
+import { isRedirectError } from "next/dist/client/components/redirect-error";
 import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 import { ClientResponseError } from "pocketbase";
 import { z } from "zod";
 import {
@@ -131,52 +134,8 @@ export async function createRecipe(
 	},
 	formData: FormData,
 ) {
-	const schema = z.object({
-		title: z
-			.string({
-				required_error: "Title is required",
-				invalid_type_error: "Title must be text",
-			})
-			.min(1, "Title cannot be empty"),
-		ingredients: z.string().transform((str) => {
-			try {
-				const parsed = JSON.parse(str);
-				return z
-					.array(z.string().min(1, "Ingredient cannot be empty"))
-					.min(1, "At least one ingredient is required")
-					.parse(parsed);
-			} catch {
-				throw new Error("Invalid ingredients format - please check your input");
-			}
-		}),
-		steps: z.string().transform((str) => {
-			try {
-				const parsed = JSON.parse(str);
-				return z
-					.array(z.string().min(1, "Step cannot be empty"))
-					.min(1, "At least one step is required")
-					.parse(parsed);
-			} catch {
-				throw new Error("Invalid steps format - please check your input");
-			}
-		}),
-		tags: z.string().transform((str) => {
-			try {
-				const parsed = JSON.parse(str);
-				return z.array(z.string().min(1, "Tag cannot be empty")).parse(parsed);
-			} catch {
-				throw new Error("Invalid tags format - please check your input");
-			}
-		}),
-		published: z.preprocess(
-			(val) => val === "true" || val === true,
-			z.boolean(),
-		),
-		image: z.instanceof(File).optional(),
-	});
-
 	try {
-		const validatedFields = schema.safeParse({
+		const validatedFields = createRecipeSchema.safeParse({
 			title: formData.get("title"),
 			ingredients: formData.get("ingredients"),
 			steps: formData.get("steps"),
@@ -223,15 +182,9 @@ export async function createRecipe(
 		}
 
 		const newRecipe = await pb.collection("recipes").create(pbFormData);
-		revalidatePath("/");
 
-		return {
-			message: validatedFields.data.published
-				? "Recipe published successfully! 🎉"
-				: "Recipe saved as draft successfully! 📝",
-			status: "success" as const,
-			id: newRecipe.id,
-		};
+		revalidatePath("/");
+		redirect(`/recipes/${newRecipe.id}`);
 	} catch (error) {
 		if (error instanceof ClientResponseError) {
 			// Handle specific PocketBase errors
@@ -255,6 +208,9 @@ export async function createRecipe(
 				id: undefined,
 			};
 		}
+		if (isRedirectError(error)) {
+			throw error;
+		}
 
 		console.error("Error creating recipe:", error);
 		return {
@@ -273,50 +229,6 @@ export async function updateRecipe(
 	},
 	formData: FormData,
 ) {
-	const schema = z.object({
-		title: z
-			.string({
-				required_error: "Title is required",
-				invalid_type_error: "Title must be text",
-			})
-			.min(1, "Title cannot be empty"),
-		ingredients: z.string().transform((str) => {
-			try {
-				const parsed = JSON.parse(str);
-				return z
-					.array(z.string().min(1, "Ingredient cannot be empty"))
-					.min(1, "At least one ingredient is required")
-					.parse(parsed);
-			} catch {
-				throw new Error("Invalid ingredients format - please check your input");
-			}
-		}),
-		steps: z.string().transform((str) => {
-			try {
-				const parsed = JSON.parse(str);
-				return z
-					.array(z.string().min(1, "Step cannot be empty"))
-					.min(1, "At least one step is required")
-					.parse(parsed);
-			} catch {
-				throw new Error("Invalid steps format - please check your input");
-			}
-		}),
-		tags: z.string().transform((str) => {
-			try {
-				const parsed = JSON.parse(str);
-				return z.array(z.string().min(1, "Tag cannot be empty")).parse(parsed);
-			} catch {
-				throw new Error("Invalid tags format - please check your input");
-			}
-		}),
-		published: z.preprocess(
-			(val) => val === "true" || val === true,
-			z.boolean(),
-		),
-		image: z.union([z.instanceof(File), z.null(), z.undefined()]),
-	});
-
 	try {
 		const recipeId = formData.get("recipeId") as string;
 		if (!recipeId) {
@@ -326,7 +238,7 @@ export async function updateRecipe(
 				id: undefined,
 			};
 		}
-		const validatedFields = schema.safeParse({
+		const validatedFields = editRecipeSchema.safeParse({
 			title: formData.get("title"),
 			ingredients: formData.get("ingredients"),
 			steps: formData.get("steps"),
@@ -381,19 +293,11 @@ export async function updateRecipe(
 			pbFormData.append("image", validatedFields.data.image);
 		}
 
-		const updatedRecipe = await pb
-			.collection("recipes")
-			.update(recipeId, pbFormData);
+		await pb.collection("recipes").update(recipeId, pbFormData);
+
 		revalidatePath("/");
 		revalidatePath(`/recipes/${recipeId}`);
-
-		return {
-			message: validatedFields.data.published
-				? "Recipe updated and published successfully! 🎉"
-				: "Recipe updated successfully! 📝",
-			status: "success" as const,
-			id: updatedRecipe.id,
-		};
+		redirect(`/recipes/${recipeId}`);
 	} catch (error) {
 		if (error instanceof ClientResponseError) {
 			if (error.status === 400) {
@@ -415,6 +319,9 @@ export async function updateRecipe(
 				status: "error" as const,
 				id: undefined,
 			};
+		}
+		if (isRedirectError(error)) {
+			throw error;
 		}
 		console.error("Error updating recipe:", error);
 		return {
