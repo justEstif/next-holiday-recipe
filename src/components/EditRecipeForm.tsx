@@ -1,10 +1,9 @@
 "use client";
-import { useActionState, useEffect, useState } from "react";
-import { redirect } from "next/navigation";
+import { updateRecipe } from "@/actions";
+import type { IRecipe } from "@/types";
+import { useActionState, useState } from "react";
 import DynamicInput from "./DynamicInput";
 import FormMessage from "./FormMessage";
-import { IRecipe } from "@/types";
-import { updateRecipe } from "@/actions";
 
 export default function EditRecipeForm({ recipe }: { recipe: IRecipe }) {
 	const [state, formAction, pending] = useActionState(updateRecipe, {
@@ -38,12 +37,6 @@ export default function EditRecipeForm({ recipe }: { recipe: IRecipe }) {
 
 		return formAction(newFormData);
 	};
-
-	useEffect(() => {
-		if (!pending && state?.id) {
-			redirect(`/recipes/${state.id}`);
-		}
-	}, [pending, state]);
 
 	return (
 		<form action={handleFormAction}>

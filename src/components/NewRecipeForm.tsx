@@ -1,6 +1,5 @@
 "use client";
 import { createRecipe } from "@/actions";
-import { redirect } from "next/navigation";
 import { useActionState, useEffect, useState } from "react";
 import DynamicInput from "./DynamicInput";
 import FormMessage from "./FormMessage";
@@ -37,12 +36,6 @@ export default function NewRecipeForm() {
 
 		return formAction(newFormData);
 	};
-
-	useEffect(() => {
-		if (!pending && state?.id) {
-			redirect(`/recipes/${state.id}`);
-		}
-	}, [pending, state]);
 
 	return (
 		<form action={handleFormAction}>
