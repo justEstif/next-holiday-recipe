@@ -1,88 +1,76 @@
 "use client";
 import { createRecipe } from "@/actions";
-import { ChangeEvent, useActionState, useState } from "react";
+import { useActionState, useEffect, useState } from "react";
+import DynamicInput from "./DynamicInput";
 import FormMessage from "./FormMessage";
 
-type DynamicInputProps = {
-  name: string;
-  label: string;
-};
-
-function DynamicInput({ name, label }: DynamicInputProps) {
-  // Always start with one empty field
-  const [fields, setFields] = useState<string[]>([""]);
-
-  const handleFieldChange = (
-    index: number,
-    event: ChangeEvent<HTMLInputElement>,
-  ) => {
-    const newFields = [...fields];
-    newFields[index] = event.target.value;
-    setFields(newFields);
-  };
-
-  const addField = () => {
-    // Check if the last field is not empty before adding a new field
-    if (fields[fields.length - 1].trim() !== "") {
-      setFields([...fields, ""]);
-    } else {
-      alert("Please fill out the previous field before adding a new one.");
-    }
-  };
-
-  return (
-    <fieldset>
-      <legend>{label}</legend>
-      {fields.map((value, index) => (
-        <div key={index}>
-          <input
-            type="text"
-            name={`${name}[${index + 1}]`}
-            value={value}
-            onChange={(e) => handleFieldChange(index, e)}
-            required={index === 0}
-          />
-        </div>
-      ))}
-      <button type="button" onClick={addField}>Add {label}</button>
-    </fieldset>
-  );
-}
-
 export default function NewRecipeForm() {
-  const [state, formAction] = useActionState(createRecipe, { message: "" });
-  console.log(state);
-  return (
-    <form action={formAction}>
-      <label>
-        Title
-        <input
-          id="recipeTitle"
-          name="title"
-          type="text"
-          required
-        />
-      </label>
-      <label>
-        Image
-        <input
-          type="file"
-          id="recipeImage"
-          name="image"
-        />
-      </label>
+	const [state, formAction, pending] = useActionState(createRecipe, {
+		message: "",
+		status: undefined as "success" | "error" | undefined,
+		id: undefined as string | undefined,
+	});
+	const [isPublished, setIsPublished] = useState(false);
 
-      {/* Ingredients - start with one empty field */}
-      <DynamicInput name="ingredients" label="Ingredients" />
+	const handleFormAction = async (formData: FormData) => {
+		const ingredientInputs = Array.from(formData.getAll("ingredients"));
+		const stepInputs = Array.from(formData.getAll("steps"));
+		const tagInputs = Array.from(formData.getAll("tags"));
 
-      {/* Steps - start with one empty field */}
-      <DynamicInput name="steps" label="Steps" />
+		const ingredients = ingredientInputs.filter((val) => val !== "");
+		const steps = stepInputs.filter((val) => val !== "");
+		const tags = tagInputs.filter((val) => val !== "");
 
-      {/* Tags - now also start with one empty field */}
-      <DynamicInput name="tags" label="Tags" />
+		const newFormData = new FormData();
+		newFormData.set("title", formData.get("title") as string);
 
-      <FormMessage message={state?.message} />
-      <button type="submit">Preview Recipe</button>
-    </form>
-  );
+		newFormData.set("published", isPublished.toString());
+		newFormData.set("ingredients", JSON.stringify(ingredients));
+		newFormData.set("steps", JSON.stringify(steps));
+		newFormData.set("tags", JSON.stringify(tags));
+
+		const image = formData.get("image");
+		if (image instanceof File && image.size > 0) {
+			newFormData.set("image", image);
+		}
+
+		return formAction(newFormData);
+	};
+
+	return (
+		<form action={handleFormAction}>
+			<label>
+				Title
+				<input id="recipeTitle" name="title" type="text" />
+			</label>
+			<label>
+				Image
+				<input id="recipeImage" name="image" type="file" />
+			</label>
+
+			<DynamicInput name="ingredients" label="Ingredients" />
+			<DynamicInput name="steps" label="Steps" />
+			<DynamicInput name="tags" label="Tags" />
+
+			<label>
+				Publish Recipe{" "}
+				<input
+					id="published"
+					name="published"
+					type="checkbox"
+					checked={isPublished}
+					onChange={(e) => setIsPublished(e.target.checked)}
+				/>
+			</label>
+
+			<FormMessage message={state?.message} />
+			<button type="submit" aria-busy={pending} disabled={pending}>
+				{pending
+					? "Saving ..."
+					: isPublished
+						? "Publish Recipe"
+						: "Preview Recipe"}
+			</button>
+		</form>
+	);
 }

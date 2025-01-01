@@ -7,7 +7,14 @@
 	},
 	"files": {
 		"ignoreUnknown": false,
-		"ignore": []
+		"ignore": [
+			"node_modules/",
+			".next/",
+			"**/__tests__/**",
+			"*.config.js",
+			"server/pb_migrations/**",
+			"server/pb_data/**"
+		]
 	},
 	"formatter": {
 		"enabled": true,
