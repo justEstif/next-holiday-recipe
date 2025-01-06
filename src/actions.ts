@@ -1,5 +1,10 @@
 "use server";
-import { createRecipeSchema, editRecipeSchema } from "@/schemas";
+import {
+	createRecipeSchema,
+	editAccountSchema,
+	editRecipeSchema,
+	signUpSchema,
+} from "@/schemas";
 import { revalidatePath } from "next/cache";
 import { isRedirectError } from "next/dist/client/components/redirect-error";
 import { cookies } from "next/headers";
@@ -72,24 +77,7 @@ export async function signUp(
 		message: "Failed to sign up",
 	};
 
-	const schema = z.object({
-		name: z.string({
-			invalid_type_error: "Invalid name",
-		}),
-		email: z
-			.string({
-				invalid_type_error: "Invalid Email",
-			})
-			.email(),
-		password: z.string({
-			invalid_type_error: "Invalid Password",
-		}),
-		passwordConfirm: z.string({
-			invalid_type_error: "Invalid Password Confirm",
-		}),
-	});
-
-	const validatedFields = schema.safeParse({
+	const validatedFields = signUpSchema.safeParse({
 		name: formData.get("name"),
 		email: formData.get("email"),
 		password: formData.get("password"),
@@ -104,6 +92,7 @@ export async function signUp(
 	const pb = await pbServer(cookieStore);
 
 	const user = await createUser(pb, {
+		name: validatedFields.data.name,
 		email: validatedFields.data.email,
 		password: validatedFields.data.password,
 		passwordConfirm: validatedFields.data.passwordConfirm,
@@ -243,7 +232,8 @@ export async function updateRecipe(
 			ingredients: formData.get("ingredients"),
 			steps: formData.get("steps"),
 			tags: formData.get("tags"),
-			image: formData.get("image"),
+			image:
+				formData.get("image") instanceof File ? formData.get("image") : null,
 			published: formData.get("published"),
 		});
 
@@ -330,4 +320,58 @@ export async function updateRecipe(
 			id: undefined,
 		};
 	}
+}
+
+export async function updateUser(
+	_prevState: {
+		message: string;
+		status?: "error" | "success";
+		id?: string;
+	},
+	formData: FormData,
+) {
+	const cookieStore = await cookies();
+	const pb = await pbServer(cookieStore);
+	const currentUser = getLoggedInUser(pb);
+	if (!currentUser?.id) {
+		return {
+			message: "You must be logged in to update a recipe",
+			status: "error" as const,
+			id: undefined,
+		};
+	}
+
+	// get the form data and validate it
+	const validatedFields = editAccountSchema.safeParse({
+		name: formData.get("name"),
+		username: formData.get("username"),
+		email: formData.get("email"),
+		oldPassword: formData.get("oldPassword"),
+		password: formData.get("newPassword"),
+		passwordConfirm: formData.get("newPasswordConfirm"),
+		avatar:
+			formData.get("avatar") instanceof File ? formData.get("avatar") : null,
+	});
+
+	if (!validatedFields.success) {
+		const errorMessages = validatedFields.error.issues
+			.map((issue) => issue.message)
+			.join(". ");
+		return {
+			message: errorMessages,
+			status: "error" as const,
+			id: undefined,
+		};
+	}
+
+	const data = {
+		username: validatedFields.data?.username,
+		avatar: validatedFields.data?.avatar,
+		password: validatedFields.data?.password,
+		passwordConfirm: validatedFields.data?.passwordConfirm,
+		oldPassword: validatedFields.data?.oldPassword,
+		name: validatedFields.data?.name,
+	};
+
+	const record = await pb.collection("users").update(currentUser.id, data);
 }

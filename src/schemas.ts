@@ -1,5 +1,22 @@
 import { z } from "zod";
 
+export const signUpSchema = z.object({
+	name: z.string({
+		invalid_type_error: "Invalid name",
+	}),
+	email: z
+		.string({
+			invalid_type_error: "Invalid Email",
+		})
+		.email(),
+	password: z.string({
+		invalid_type_error: "Invalid Password",
+	}),
+	passwordConfirm: z.string({
+		invalid_type_error: "Invalid Password Confirm",
+	}),
+});
+
 export const editRecipeSchema = z.object({
 	title: z
 		.string({
@@ -81,3 +98,53 @@ export const createRecipeSchema = z.object({
 	published: z.preprocess((val) => val === "true" || val === true, z.boolean()),
 	image: z.union([z.instanceof(File), z.null(), z.undefined()]),
 });
+
+export const editAccountSchema = z
+	.object({
+		name: z
+			.string({
+				invalid_type_error: "Invalid name",
+			})
+			.optional(),
+		username: z
+			.string({
+				invalid_type_error: "Invalid username",
+			})
+			.optional(),
+		email: z
+			.string({
+				invalid_type_error: "Invalid Email",
+			})
+			.email()
+			.optional(),
+		oldPassword: z
+			.string({
+				invalid_type_error: "Invalid Current Password",
+			})
+			.optional(),
+		password: z
+			.string({
+				invalid_type_error: "Invalid New Password",
+			})
+			.optional(),
+		passwordConfirm: z
+			.string({
+				invalid_type_error: "Invalid Password Confirm",
+			})
+			.optional(),
+		avatar: z.union([z.instanceof(File), z.null(), z.undefined()]),
+	})
+	.refine(
+		(data) => {
+			// If any password field has a value, all must have values
+			if (data.oldPassword || data.password || data.passwordConfirm) {
+				return !!data.oldPassword && !!data.password && !!data.passwordConfirm;
+			}
+			// If all are empty/undefined, that's fine
+			return true;
+		},
+		{
+			message: "All password fields must be filled if any are provided",
+			path: ["passwordConfirm"], // Show error on the confirm password field
+		},
+	);

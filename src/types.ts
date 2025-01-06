@@ -1,23 +1,17 @@
 import type { ReadonlyRequestCookies } from "next/dist/server/web/spec-extension/adapters/request-cookies";
 import type { NextRequest, NextResponse } from "next/server";
+import { RecordModel } from "pocketbase";
 
-export interface IUser {
+export interface IUser extends RecordModel {
 	avatar: string;
-	collectionId: string;
-	collectionName: string;
-	created: Date; // Using Date type
+	email: string;
 	emailVisibility: boolean;
-	id: string;
 	name: string;
-	updated: Date; // Using Date type
 	username: string;
 	verified: boolean;
 }
 
-export interface IRecipe {
-	id: string;
-	collectionId: string;
-	collectionName: string;
+export interface IRecipe extends RecordModel {
 	created: string; // ISO date string
 	updated: string; // ISO date string
 	author: string;
