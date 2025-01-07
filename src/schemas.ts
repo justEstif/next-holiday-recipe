@@ -132,7 +132,15 @@ export const editAccountSchema = z
 				invalid_type_error: "Invalid Password Confirm",
 			})
 			.optional(),
-		avatar: z.union([z.instanceof(File), z.null(), z.undefined()]),
+		avatar: z
+			.union([z.instanceof(File), z.null(), z.undefined()])
+			.transform((file) => {
+				// If it's a File with size 0 or null, transform to undefined
+				if ((file instanceof File && file.size === 0) || file === null) {
+					return undefined;
+				}
+				return file;
+			}),
 	})
 	.refine(
 		(data) => {

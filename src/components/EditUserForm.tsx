@@ -14,6 +14,8 @@ export default function EditUserForm({ user }: { user: IUser }) {
 	const [password, setPassword] = useState("");
 	const [passwordConfirm, setPasswordConfirm] = useState("");
 
+	console.log("message", JSON.stringify(state?.message, null, 4));
+
 	// Check if any password field has a value
 	const isPasswordRequired =
 		oldPassword.length > 0 || password.length > 0 || passwordConfirm.length > 0;
@@ -44,7 +46,19 @@ export default function EditUserForm({ user }: { user: IUser }) {
 
 			<label>
 				Avatar
-				<input id="avatar" name="avatar" type="file" />
+				<input
+					id="avatar"
+					name="avatar"
+					type="file"
+					onChange={(e) => {
+						const file = e.target.files?.[0];
+						// If no file is selected or file size is 0, clear the input
+						if (!file || file.size === 0) {
+							e.target.value = "";
+						}
+					}}
+					accept="image/*" // Optional: restrict to image files only
+				/>
 			</label>
 
 			<label>

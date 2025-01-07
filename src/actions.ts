@@ -347,10 +347,9 @@ export async function updateUser(
 		username: formData.get("username"),
 		email: formData.get("email"),
 		oldPassword: formData.get("oldPassword"),
-		password: formData.get("newPassword"),
-		passwordConfirm: formData.get("newPasswordConfirm"),
-		avatar:
-			formData.get("avatar") instanceof File ? formData.get("avatar") : null,
+		password: formData.get("password"),
+		passwordConfirm: formData.get("passwordConfirm"),
+		avatar: formData.get("avatar"),
 	});
 
 	if (!validatedFields.success) {
@@ -366,12 +365,53 @@ export async function updateUser(
 
 	const data = {
 		username: validatedFields.data?.username,
-		avatar: validatedFields.data?.avatar,
 		password: validatedFields.data?.password,
 		passwordConfirm: validatedFields.data?.passwordConfirm,
 		oldPassword: validatedFields.data?.oldPassword,
 		name: validatedFields.data?.name,
+		avatar: validatedFields.data?.avatar,
 	};
 
-	const record = await pb.collection("users").update(currentUser.id, data);
+	console.log("data", data);
+
+	try {
+		await pb.collection("users").update(currentUser.id, data);
+		revalidatePath("/account");
+		redirect("/account");
+	} catch (error) {
+		if (isRedirectError(error)) {
+			throw error;
+		}
+		if (error instanceof ClientResponseError) {
+			// Handle specific PocketBase errors
+			if (error.status === 400) {
+				return {
+					message: "Invalid user data. Please check your inputs.",
+					status: "error" as const,
+					id: undefined,
+				};
+			}
+
+			if (error.status === 401 || error.status === 403) {
+				return {
+					message: "You don't have permission to edit user data.",
+					status: "error" as const,
+					id: undefined,
+				};
+			}
+
+			return {
+				message: `Database error: ${error.message}`,
+				status: "error" as const,
+				id: undefined,
+			};
+		}
+
+		console.error("Error editing user data:", error);
+		return {
+			message: "An unexpected error occurred. Please try again later.",
+			status: "error" as const,
+			id: undefined,
+		};
+	}
 }
