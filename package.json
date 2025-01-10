@@ -1,10 +1,9 @@
 {
 	"name": "next-holiday-recipe",
 	"version": "0.1.0",
-	"packageManager": "pnpm@9.15.2",
 	"private": true,
 	"scripts": {
-		"dev": "pnpm run pb:serve & next dev --turbopack",
+		"dev": "bun run pb:serve & next dev --turbopack",
 		"build": "next build",
 		"start": "next start",
 		"lint": "biome check .",
