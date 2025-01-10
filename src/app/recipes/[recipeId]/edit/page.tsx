@@ -41,6 +41,7 @@ export default async function Page({
 	return (
 		<section className="container">
 			<h1>Edit Recipe</h1>
+      {/* TODO Create delete button option  */}
 			<EditRecipeForm recipe={recipe} />
 		</section>
 	);

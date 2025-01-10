@@ -1,3 +1,4 @@
+import SeedButton from "@/components/SeedButton";
 import { getLoggedInUser, pbServer } from "@/lib/server/pb";
 import type { IRecipe } from "@/types";
 import { getFormattedDate } from "@/utils";
@@ -12,7 +13,6 @@ async function getPublishedRecipes(pb: Client) {
 		const filter = currentUser?.id
 			? `(published = true || author = "${currentUser.id}")`
 			: "published = true";
-
 		const recipes = await pb.collection("recipes").getList<IRecipe>(1, 50, {
 			filter,
 			expand: "author",
@@ -36,9 +36,7 @@ function Recipe({ recipe, imageSrc }: { recipe: IRecipe; imageSrc?: string }) {
 					{!recipe.published && <mark>Draft</mark>}
 				</div>
 			</header>
-
 			{recipe?.expand?.author?.username}
-
 			{recipe?.image && imageSrc && (
 				<Image
 					src={imageSrc}
@@ -59,12 +57,16 @@ function Recipe({ recipe, imageSrc }: { recipe: IRecipe; imageSrc?: string }) {
 export default async function Home() {
 	const cookieStore = await cookies();
 	const pb = await pbServer(cookieStore);
-
 	const recipes = await getPublishedRecipes(pb);
+	const currentUser = getLoggedInUser(pb);
+
+	// Check if user is admin - you'll need to adjust this based on your admin identification logic
+	const isAdmin = currentUser?.email === process.env.ADMIN_EMAIL;
 
 	return (
 		<section className="container">
 			<h1>Home Page</h1>
+			{isAdmin && <SeedButton />}
 			{recipes?.items?.map((recipe) => (
 				<Fragment key={recipe.id}>
 					<Recipe

@@ -1,0 +1,241 @@
+{
+	"recipes": [
+		{
+			"title": "Classic Spaghetti Carbonara",
+			"ingredients": [
+				"400g spaghetti",
+				"200g pancetta or guanciale",
+				"4 large eggs",
+				"100g Pecorino Romano cheese",
+				"100g Parmigiano Reggiano",
+				"2 cloves garlic",
+				"Black pepper",
+				"Salt"
+			],
+			"steps": [
+				"Bring a large pot of salted water to boil",
+				"Cook spaghetti according to package instructions",
+				"While pasta cooks, crisp pancetta in a large pan",
+				"Whisk eggs, grated cheeses, and pepper in a bowl",
+				"Toss hot pasta with pancetta and egg mixture",
+				"Serve immediately with extra cheese and pepper"
+			],
+			"tags": ["Italian", "Pasta", "Quick", "Traditional"],
+			"published": true
+		},
+		{
+			"title": "Thai Green Curry",
+			"ingredients": [
+				"400ml coconut milk",
+				"4 tbsp green curry paste",
+				"500g chicken breast",
+				"200g bamboo shoots",
+				"200g green beans",
+				"4 kaffir lime leaves",
+				"2 tbsp fish sauce",
+				"1 tbsp palm sugar",
+				"Thai basil leaves"
+			],
+			"steps": [
+				"Heat coconut milk in a large pan until it splits",
+				"Add curry paste and fry until fragrant",
+				"Add chicken and cook until sealed",
+				"Add vegetables and lime leaves",
+				"Simmer for 15-20 minutes",
+				"Season with fish sauce and palm sugar",
+				"Garnish with Thai basil"
+			],
+			"tags": ["Thai", "Curry", "Spicy", "Asian"],
+			"published": true
+		},
+		{
+			"title": "Classic French Onion Soup",
+			"ingredients": [
+				"6 large onions",
+				"2l beef stock",
+				"200ml white wine",
+				"2 bay leaves",
+				"4 sprigs thyme",
+				"Baguette slices",
+				"200g Gruyere cheese",
+				"Butter",
+				"Olive oil",
+				"Salt and pepper"
+			],
+			"steps": [
+				"Slowly caramelize sliced onions (45-60 minutes)",
+				"Add wine and reduce",
+				"Pour in stock and add herbs",
+				"Simmer for 30 minutes",
+				"Toast baguette slices",
+				"Fill bowls with soup, top with bread and cheese",
+				"Grill until cheese is golden and bubbly"
+			],
+			"tags": ["French", "Soup", "Winter", "Classic"],
+			"published": true
+		},
+		{
+			"title": "Homemade Pizza Margherita",
+			"ingredients": [
+				"500g bread flour",
+				"7g dried yeast",
+				"1 tsp salt",
+				"400g canned tomatoes",
+				"Fresh mozzarella",
+				"Fresh basil",
+				"Olive oil",
+				"Salt and pepper"
+			],
+			"steps": [
+				"Make dough with flour, yeast, salt, and water",
+				"Let rise for 1-2 hours",
+				"Shape into pizza base",
+				"Top with crushed tomatoes",
+				"Add torn mozzarella",
+				"Bake at highest oven temperature",
+				"Finish with fresh basil and olive oil"
+			],
+			"tags": ["Italian", "Pizza", "Vegetarian", "Traditional"],
+			"published": true
+		},
+		{
+			"title": "Japanese Miso Soup",
+			"ingredients": [
+				"4 cups dashi stock",
+				"3 tbsp miso paste",
+				"100g silken tofu",
+				"2 green onions",
+				"Wakame seaweed",
+				"Bonito flakes"
+			],
+			"steps": [
+				"Heat dashi stock",
+				"Dissolve miso paste in a little stock",
+				"Add dissolved miso to main pot",
+				"Add cubed tofu",
+				"Simmer gently",
+				"Add chopped green onions",
+				"Serve with wakame and bonito flakes"
+			],
+			"tags": ["Japanese", "Soup", "Healthy", "Quick"],
+			"published": true
+		},
+		{
+			"title": "Beef Bourguignon",
+			"ingredients": [
+				"1kg beef chuck",
+				"200g bacon",
+				"500g mushrooms",
+				"20 pearl onions",
+				"750ml red wine",
+				"2 carrots",
+				"2 celery stalks",
+				"Herbs and garlic"
+			],
+			"steps": [
+				"Brown beef in batches",
+				"Cook bacon and vegetables",
+				"Add wine and reduce",
+				"Return beef to pot",
+				"Simmer for 3 hours",
+				"Add mushrooms for last 30 minutes",
+				"Serve with mashed potatoes"
+			],
+			"tags": ["French", "Stew", "Winter", "Classic"],
+			"published": true
+		},
+		{
+			"title": "Vegetarian Buddha Bowl",
+			"ingredients": [
+				"1 cup quinoa",
+				"1 sweet potato",
+				"2 cups kale",
+				"1 avocado",
+				"Chickpeas",
+				"Tahini",
+				"Lemon juice",
+				"Various seeds"
+			],
+			"steps": [
+				"Cook quinoa",
+				"Roast sweet potato and chickpeas",
+				"Massage kale with olive oil",
+				"Make tahini dressing",
+				"Assemble bowl with all components",
+				"Top with seeds and dressing"
+			],
+			"tags": ["Vegetarian", "Healthy", "Bowl", "Lunch"],
+			"published": true
+		},
+		{
+			"title": "Fish Tacos",
+			"ingredients": [
+				"500g white fish",
+				"Corn tortillas",
+				"Red cabbage slaw",
+				"Lime crema",
+				"Avocado",
+				"Cilantro",
+				"Lime wedges"
+			],
+			"steps": [
+				"Season and grill fish",
+				"Make cabbage slaw",
+				"Prepare lime crema",
+				"Warm tortillas",
+				"Assemble tacos",
+				"Serve with lime wedges"
+			],
+			"tags": ["Mexican", "Seafood", "Quick", "Fresh"],
+			"published": true
+		},
+		{
+			"title": "Mushroom Risotto",
+			"ingredients": [
+				"400g arborio rice",
+				"500g mixed mushrooms",
+				"1.5L vegetable stock",
+				"1 onion",
+				"2 cloves garlic",
+				"White wine",
+				"Parmesan",
+				"Butter"
+			],
+			"steps": [
+				"Sauté mushrooms and set aside",
+				"Cook onion and garlic",
+				"Add rice and toast",
+				"Add wine and reduce",
+				"Gradually add hot stock",
+				"Stir until creamy",
+				"Finish with mushrooms, butter, and cheese"
+			],
+			"tags": ["Italian", "Risotto", "Vegetarian", "Comfort"],
+			"published": true
+		},
+		{
+			"title": "Classic Apple Pie",
+			"ingredients": [
+				"Pie crust",
+				"6 large apples",
+				"1 cup sugar",
+				"2 tbsp flour",
+				"1 tsp cinnamon",
+				"Nutmeg",
+				"Lemon juice",
+				"Butter"
+			],
+			"steps": [
+				"Make pie crust",
+				"Slice and season apples",
+				"Fill pie crust",
+				"Add top crust and vent",
+				"Brush with egg wash",
+				"Bake until golden",
+				"Cool before serving"
+			],
+			"tags": ["Dessert", "American", "Baking", "Classic"],
+			"published": true
+		}
+	]
+}
