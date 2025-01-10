@@ -21,7 +21,7 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 - **Edit Recipe Page** (`/recipes/[recipeId]/edit`)
 - **Edit Profile Page** (`/users/[userId]/edit`)
 - **Posting Comments and Ratings** (on Recipe Details Page)
-    - the component should be hidden
+  - the component should be hidden
 - **Logout Page** (`/sign-out`)
 - **Admin Dashboard** (`/admin`) - _If implemented; requires admin role._
 
